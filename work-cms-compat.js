@@ -1,7 +1,7 @@
 (() => {
-  const nativeFetch = window.fetch.bind(window);
+  const nativeFetch = globalThis.fetch.bind(globalThis);
 
-  window.fetch = async (input, init) => {
+  globalThis.fetch = async (input, init) => {
     const requestUrl = new URL(typeof input === "string" ? input : input.url, window.location.href);
     const range = requestUrl.searchParams.get("range");
 
