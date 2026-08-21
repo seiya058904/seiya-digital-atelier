@@ -54,6 +54,20 @@
       link.removeAttribute('target');
     });
   };
+  const normalizeProjectAssets = () => {
+    if (!projectPrefix) return;
+    document.querySelectorAll('[src], [srcset], [poster]').forEach((node) => {
+      for (const attribute of ['src', 'poster']) {
+        const value = node.getAttribute(attribute);
+        if (value?.startsWith('/assets/')) node.setAttribute(attribute, `${projectPrefix}${value}`);
+      }
+      const srcset = node.getAttribute('srcset');
+      if (srcset) {
+        const next = srcset.replace(/(^|\s)(\/assets\/)/g, `$1${projectPrefix}$2`);
+        if (next !== srcset) node.setAttribute('srcset', next);
+      }
+    });
+  };
   const isProjectCardNavigation = (value) => {
     if (!value) return false;
     try {
@@ -260,6 +274,7 @@
     normalizeFooter();
     applyAboutChanges();
     applyWorkChanges();
+    normalizeProjectAssets();
     disable();
     disableProjectCardLinks();
     installHomeGuards();
@@ -267,7 +282,7 @@
   updateRoute();
   new MutationObserver(updateRoute).observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ['href', 'target'],
+    attributeFilter: ['href', 'target', 'src', 'srcset', 'poster'],
     childList: true,
     subtree: true,
   });
