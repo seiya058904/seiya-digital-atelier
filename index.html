@@ -10,6 +10,14 @@
 
 	<base href="./">
 	<script>
+		if (sessionStorage.getItem('seiya-home-transition') === '1') {
+			document.documentElement.classList.add('seiya-home-pending');
+		}
+	</script>
+	<style>
+		html.seiya-home-pending body { visibility: hidden; }
+	</style>
+	<script>
 		(() => {
 			const openWork = (event) => {
 				if (event.type === 'keydown' && event.key !== 'Enter') return;
@@ -233,5 +241,5 @@
 
 </body>
 <script src="./transplant.js?v=scrollfix2"></script>
-<script src="./c-append-blocks.js?v=release-2" defer></script>
+<script src="./c-append-blocks.js?v=release-11" defer></script>
 </html>

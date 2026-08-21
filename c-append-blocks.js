@@ -14,6 +14,7 @@
   const disableExternalLinks = (root = document) => {
     if (!root?.querySelectorAll) return;
     root.querySelectorAll('a[href], area[href]').forEach((link) => {
+      if (link.dataset.allowExternal === 'true') return;
       const href = link.getAttribute('href');
       if (!isExternalNavigation(href)) return;
       link.dataset.externalUrl = href;
@@ -24,27 +25,130 @@
       if (node.shadowRoot) disableExternalLinks(node.shadowRoot);
     });
   };
+  const restoreSelectedWorkLinks = (root = document) => {
+    if (!root?.querySelectorAll) return;
+    const allowed = new Set([
+      'https://github.com/seiya058904/Hardware-Monitoring',
+      'https://seiya058904.github.io/seiya-digital-journal/',
+      'https://seiya058904.github.io/INSTANCE/',
+    ]);
+    root.querySelectorAll('a[data-external-url]').forEach((link) => {
+      const url = link.dataset.externalUrl;
+      if (!allowed.has(url)) return;
+      if (link.getAttribute('href') !== url) link.setAttribute('href', url);
+      link.dataset.allowExternal = 'true';
+    });
+    root.querySelectorAll('*').forEach((node) => {
+      if (node.shadowRoot) restoreSelectedWorkLinks(node.shadowRoot);
+    });
+  };
   const blockExternalNavigation = (event) => {
     if (event.type === 'keydown' && event.key !== 'Enter') return;
     const target = event.target instanceof Element
       ? event.target.closest('a[href], area[href]')
       : null;
+    if (target?.dataset.allowExternal === 'true') return;
     if (!target || !isExternalNavigation(target.getAttribute('href'))) return;
     event.preventDefault();
     event.stopImmediatePropagation();
   };
+  const isProjectCardNavigation = (value) => {
+    if (!value) return false;
+    try {
+      const path = new URL(value, document.baseURI || location.href).pathname.replace(/\/$/, '');
+      return /^\/work\/(nadina|halo-form|verdan-core|arcwell|lumen-grid|nova-atlas)$/i.test(path)
+        || /^\/source\/works(?:\/|$)/i.test(path);
+    } catch {
+      return false;
+    }
+  };
+  const disableProjectCardLinks = (root = document) => {
+    if (!root?.querySelectorAll) return;
+    root.querySelectorAll('a[href]').forEach((link) => {
+      if (!isProjectCardNavigation(link.getAttribute('href'))) return;
+      link.removeAttribute('href');
+      link.removeAttribute('target');
+      link.dataset.navigationDisabled = 'true';
+    });
+    root.querySelectorAll('*').forEach((node) => {
+      if (node.shadowRoot) disableProjectCardLinks(node.shadowRoot);
+    });
+  };
+  const applyFooterTargets = () => {
+    document.querySelectorAll('footer a').forEach((link) => {
+      const label = link.textContent.trim();
+      if (label === 'GitHub') {
+        link.href = 'https://github.com/seiya058904/seiya-digital-atelier';
+        link.dataset.allowExternal = 'true';
+      }
+      if (label === 'Email') {
+        link.href = 'mailto:sunmengsaiyi@gmail.com';
+        link.dataset.allowExternal = 'true';
+      }
+    });
+  };
+  const blockProjectCardNavigation = (event) => {
+    if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
+    const target = event.composedPath().find((node) =>
+      node instanceof Element && node.dataset.navigationDisabled === 'true'
+    );
+    if (!target) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  };
+  const redirectConfiguredLink = (event) => {
+    if (event.type === 'keydown' && event.key !== 'Enter') return;
+    const link = event.target instanceof Element
+      ? event.target.closest('a[data-allow-external="true"]')
+      : null;
+    if (!link) return;
+    const target = {
+      GitHub: 'https://github.com/seiya058904/seiya-digital-atelier',
+      Email: 'mailto:sunmengsaiyi@gmail.com',
+    }[link.textContent.trim()];
+    if (!target) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    window.location.assign(target);
+  };
   document.addEventListener('click', blockExternalNavigation, true);
   document.addEventListener('auxclick', blockExternalNavigation, true);
   document.addEventListener('keydown', blockExternalNavigation, true);
+  document.addEventListener('click', blockProjectCardNavigation, true);
+  document.addEventListener('auxclick', blockProjectCardNavigation, true);
+  document.addEventListener('keydown', blockProjectCardNavigation, true);
+  document.addEventListener('click', redirectConfiguredLink, true);
+  document.addEventListener('auxclick', redirectConfiguredLink, true);
+  document.addEventListener('keydown', redirectConfiguredLink, true);
   disableExternalLinks();
-  new MutationObserver(() => disableExternalLinks()).observe(document.documentElement, {
+  restoreSelectedWorkLinks();
+  disableProjectCardLinks();
+  applyFooterTargets();
+  new MutationObserver(() => {
+    restoreSelectedWorkLinks();
+    disableExternalLinks();
+  }).observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['href', 'target'],
     childList: true,
     subtree: true,
   });
+  new MutationObserver(() => disableProjectCardLinks()).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['href', 'target'],
+    childList: true,
+    subtree: true,
+  });
+  new MutationObserver(() => applyFooterTargets()).observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+  });
 
   const originalFetch = window.fetch.bind(window);
+  const finishHomeTransition = () => {
+    document.documentElement.classList.remove('seiya-home-pending');
+    try { sessionStorage.removeItem('seiya-home-transition'); } catch {}
+  };
   const sourceRoot = (key) => {
     const host = document.createElement('div');
     host.dataset.cSource = key;
@@ -93,6 +197,9 @@
       return sourceHost ? `${sourceHost}/${mapped}` : mapped;
     }
   };
+  const reviseG5ImageUrl = (value) => value.includes('G5V2BfFS1k2hTxiBqkphqzLkVNc') && !value.includes('asset-rev=')
+    ? `${value}${value.includes('?') ? '&' : '?'}asset-rev=20260821-2`
+    : value;
   const rewriteCss = (css, basePath) => css.replace(/url\(\s*(["']?)([^"')]+)\1\s*\)/gi, (match, quote, value) => {
     if (specialUrl(value)) return match;
     return `url("${resolveUrl(value, basePath)}")`;
@@ -101,7 +208,7 @@
     root.querySelectorAll('[src], [srcset], [poster], [style], [href]').forEach((element) => {
       for (const attribute of ['src', 'poster', 'href']) {
         const value = element.getAttribute(attribute);
-        if (value) element.setAttribute(attribute, resolveUrl(value, basePath));
+        if (value) element.setAttribute(attribute, reviseG5ImageUrl(resolveUrl(value, basePath)));
       }
       const style = element.getAttribute('style');
       if (style) element.setAttribute('style', rewriteCss(style, basePath));
@@ -109,7 +216,7 @@
       if (srcset) {
         element.setAttribute('srcset', srcset.split(',').map((item) => {
           const [url, ...descriptor] = item.trim().split(/\s+/);
-          return [resolveUrl(url, basePath), ...descriptor].join(' ');
+          return [reviseG5ImageUrl(resolveUrl(url, basePath)), ...descriptor].join(' ');
         }).join(', '));
       }
     });
@@ -146,7 +253,32 @@
     style.textContent = css;
     root.append(style);
   };
+  const stablePlacements = [];
+  const placeStableBlocks = () => {
+    stablePlacements.forEach(({ node, selector }) => {
+      const anchor = document.querySelector(`[data-framer-root] ${selector}`);
+      if (!anchor || anchor.parentNode.contains(node)) return;
+      anchor.parentNode.insertBefore(node, anchor);
+    });
+  };
   const insertBefore = (node, anchor) => {
+    if (anchor?.closest?.('[data-framer-root]')) {
+      const main = document.querySelector('#main');
+      let mount = main?.querySelector(':scope > [data-c-stable-mount]');
+      if (!mount && main) {
+        mount = document.createElement('div');
+        mount.dataset.cStableMount = 'true';
+        main.append(mount);
+      }
+      if (mount) {
+        mount.append(node);
+        const selector = anchor.matches('main[data-framer-name="Main"]')
+          ? 'main[data-framer-name="Main"]'
+          : 'section[data-framer-name="How it Works"]';
+        stablePlacements.push({ node, selector });
+        return;
+      }
+    }
     const parent = anchor?.parentNode || document.body;
     parent.insertBefore(node, anchor || null);
   };
@@ -803,6 +935,45 @@
     });
   };
   const applyCSourceCopy = (source) => replaceDetachedText(source.document, detachedCopy);
+  document.addEventListener('submit', (event) => {
+    if (location.pathname.replace(/\/+$/, '') !== '/contact' || !(event.target instanceof HTMLFormElement)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const data = new FormData(event.target);
+    const body = ['Name', 'Email', 'Phone Number', 'Message']
+      .map((field) => `${field}: ${data.get(field) || ''}`)
+      .join('\n');
+    window.location.href = `mailto:sunmengsaiyi@gmail.com?subject=${encodeURIComponent('Website inquiry')}&body=${encodeURIComponent(body)}`;
+  }, true);
+  const applyClientRouteChanges = () => {
+    const path = location.pathname.replace(/\/+$/, '') || '/';
+    if (path === '/about' && !document.getElementById('route-about-customizations')) {
+      const style = document.createElement('style');
+      style.id = 'route-about-customizations';
+      style.textContent = `
+        [data-framer-name="Team"] { display: none !important; }
+        @media (min-width: 810px) {
+          [data-framer-name="Image Container"]:has(img[src*="aLIllYwlY5spWoij2YX9pjFYfqk_8318d33ca2.webp"]) {
+            width: 80% !important;
+            margin-inline: auto !important;
+          }
+        }
+      `;
+      document.head.append(style);
+    }
+    if (path !== '/work') return;
+    const header = [...document.querySelectorAll('[data-framer-name]')]
+      .find((node) => node.getAttribute('data-framer-name') === 'Header');
+    const filters = header?.querySelector('.framer-pxadms');
+    if (!filters || filters.dataset.routeFilterHidden) return;
+    if (['All', 'Framer Dev', 'Product Design', 'Branding Design', 'Web Dev']
+      .every((label) => filters.textContent.includes(label))) {
+      filters.dataset.routeFilterHidden = 'true';
+      filters.style.display = 'none';
+    }
+  };
+  applyClientRouteChanges();
+  new MutationObserver(applyClientRouteChanges).observe(document.documentElement, { childList: true, subtree: true });
   const integrationsCopy = [
     ['Connect the tools that hold your context', 'The tools that connect the way I build.'],
     ['Connect the tools that', 'The tools that connect'],
@@ -966,10 +1137,16 @@
     await appendCBlock('c-selected-work', cSource.document.querySelector('#work'), cSource, howItWorks, cCss, 'Selected Work');
     await appendMirrorB(mirrorB, howItWorks);
     await appendIntegrations(personal, howItWorks);
+    placeStableBlocks();
+    const stableRoot = document.querySelector('#main');
+    if (stableRoot) new MutationObserver(placeStableBlocks).observe(stableRoot, { childList: true, subtree: true });
     document.querySelectorAll('#__framer-editorbar, iframe.status_hidden').forEach((node) => node.remove());
+    applyFooterTargets();
     document.documentElement.dataset.cArchitecture = 'mirror-a-work-single-document-source-state';
     document.body.dataset.cAddedBlocks = 'c-ticker,c-selected-work,mirror-b-works-social-proof-services,personal-integrations';
+    finishHomeTransition();
   } catch (error) {
     console.error('[C source integration]', error);
+    finishHomeTransition();
   }
 })();
