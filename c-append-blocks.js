@@ -308,7 +308,7 @@
     :host(.c-source-host-ticker){margin-bottom:clamp(48px,6vw,80px)}
     .c-source-section{position:relative;width:100%;box-sizing:border-box;padding-top:0}
     .c-source-section[data-c-section-label="Selected Work"] .section-heading{width:100%;align-items:center;justify-content:center}
-    .c-source-section[data-c-section-label="Selected Work"] .section-heading h2{font-size:clamp(3.4rem,6vw,6rem);text-align:center}
+    .c-source-section[data-c-section-label="Selected Work"] .section-heading h2{font-size:clamp(3.4rem,6vw,6rem);line-height:.96;text-align:center}
     .c-source-section[data-c-section-label="Visual Archive"],.c-source-section[data-c-section-label="A Few Signals"],.c-source-section[data-c-section-label="What I Build"],.c-source-section[data-c-section-label="My Toolkit"]{padding-top:56px}
     .c-source-section-label{position:absolute;top:0;left:50%;z-index:5;box-sizing:border-box;width:max-content;margin:0;padding:6px 12px;border-radius:8px;background:#fff4d6;color:#171512;font:500 14px/20px Inter,Arial,sans-serif;letter-spacing:-.01em;text-align:center;transform:translateX(-50%)}
     [data-framer-appear-id]{will-change:opacity,transform}
