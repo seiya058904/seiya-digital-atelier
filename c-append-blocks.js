@@ -229,6 +229,19 @@
       if (next !== value) element.setAttribute('srcset', next);
     });
   };
+  const normalizeSiteLinks = (root = document) => {
+    root.querySelectorAll?.('a[href], area[href]').forEach((link) => {
+      const href = link.getAttribute('href');
+      if (!href || /^(https?:|mailto:|tel:|sms:|#|javascript:|data:|blob:)/i.test(href)) return;
+      let path;
+      try { path = new URL(href, document.baseURI || location.href).pathname; } catch { return; }
+      const normalized = path.replace(projectPrefix, '').replace(/\/+$/, '') || '/';
+      if (!['/', '/work', '/about', '/contact'].includes(normalized)) return;
+      const suffix = href.includes('#') ? href.slice(href.indexOf('#')) : '';
+      const next = sitePath(normalized === '/' ? `/${suffix}` : `${normalized}${suffix}`);
+      if (href !== next) link.setAttribute('href', next);
+    });
+  };
   const rewriteCss = (css, basePath) => css.replace(/url\(\s*(["']?)([^"')]+)\1\s*\)/gi, (match, quote, value) => {
     if (specialUrl(value)) return match;
     return `url("${resolveUrl(value, basePath)}")`;
@@ -1169,9 +1182,16 @@
     await appendMirrorB(mirrorB, howItWorks);
     await appendIntegrations(personal, howItWorks);
     normalizeRepositoryPaths();
+    normalizeSiteLinks();
     new MutationObserver(() => normalizeRepositoryPaths()).observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['src', 'srcset', 'poster'],
+      childList: true,
+      subtree: true,
+    });
+    new MutationObserver(() => normalizeSiteLinks()).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['href'],
       childList: true,
       subtree: true,
     });
