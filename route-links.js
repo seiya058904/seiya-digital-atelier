@@ -103,10 +103,14 @@
         if (next !== srcset) node.setAttribute('srcset', next);
       }
       const style = node.getAttribute('style');
-      if (style) node.setAttribute('style', style.replace(/url\(\s*(['"]?)\/assets\//g, `url($1${projectPrefix}/assets/`));
+      if (style) {
+        const nextStyle = style.replace(/url\(\s*(['"]?)\/assets\//g, `url($1${projectPrefix}/assets/`);
+        if (nextStyle !== style) node.setAttribute('style', nextStyle);
+      }
     });
     document.querySelectorAll('style').forEach((style) => {
-      style.textContent = style.textContent.replace(/url\(\s*(['"]?)\/assets\//g, `url($1${projectPrefix}/assets/`);
+      const next = style.textContent.replace(/url\(\s*(['"]?)\/assets\//g, `url($1${projectPrefix}/assets/`);
+      if (next !== style.textContent) style.textContent = next;
     });
   };
   const isProjectCardNavigation = (value) => {
