@@ -2,10 +2,13 @@
   const nativeFetch = globalThis.fetch.bind(globalThis);
 
   globalThis.fetch = async (input, init) => {
-    const requestUrl = new URL(typeof input === "string" ? input : input.url, window.location.href);
+    const requestUrl = new URL(
+      typeof input === 'string' ? input : input.url,
+      window.location.href,
+    );
     const range = requestUrl.searchParams.get("range");
 
-    if (!range || !requestUrl.pathname.includes("/framerusercontent.com/cms/")) {
+    if (!range || !requestUrl.pathname.includes('/framerusercontent.com/cms/')) {
       return nativeFetch(input, init);
     }
 
@@ -14,8 +17,8 @@
     if (!response.ok) return response;
 
     const source = new Uint8Array(await response.arrayBuffer());
-    const chunks = range.split(",").map((part) => {
-      const [from, to] = part.split("-").map(Number);
+    const chunks = range.split(',').map((part) => {
+      const [from, to] = part.split('-').map(Number);
       return source.slice(from, to + 1);
     });
     const body = new Uint8Array(chunks.reduce((size, chunk) => size + chunk.length, 0));

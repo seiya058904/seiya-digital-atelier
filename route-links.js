@@ -3,12 +3,10 @@
     || location.pathname.startsWith('/seiya-digital-atelier/')
     ? '/seiya-digital-atelier'
     : '';
-  const workCacheVersion = '?v=4918e53';
   const sitePath = (path) => {
     if (!projectPrefix) return path;
-    const current = location.pathname.slice(projectPrefix.length);
-    const base = current && current !== '/' ? '../' : './';
-    return `${base}${path === '/' ? '' : path.slice(1)}`;
+    if (path === projectPrefix || path.startsWith(`${projectPrefix}/`)) return path;
+    return `${projectPrefix}${path.startsWith('/') ? path : `/${path}`}`;
   };
   const routePath = () => {
     const path = location.pathname.replace(/\/+$/, '') || '/';
@@ -31,8 +29,7 @@
     if (!['/work', '/about', '/contact'].includes(path)) return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    const target = `${sitePath(`${path}/`)}${path === '/work' ? workCacheVersion : ''}`;
-    window.location.assign(target);
+    window.location.assign(sitePath(`${path}/`));
   };
   document.addEventListener('click', routeInternalNavigation, true);
   document.addEventListener('auxclick', routeInternalNavigation, true);

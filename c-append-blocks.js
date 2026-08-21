@@ -6,12 +6,10 @@
     ? '/seiya-digital-atelier'
     : '';
   const repositoryPrefix = '/seiya-digital-atelier';
-  const workCacheVersion = '?v=4918e53';
   const sitePath = (path) => {
     if (!projectPrefix) return path;
-    const current = location.pathname.slice(projectPrefix.length);
-    const base = current && current !== '/' ? '../' : './';
-    return `${base}${path === '/' ? '' : path.slice(1)}`;
+    if (path === projectPrefix || path.startsWith(`${projectPrefix}/`)) return path;
+    return `${projectPrefix}${path.startsWith('/') ? path : `/${path}`}`;
   };
 
   const isExternalNavigation = (value) => {
@@ -259,8 +257,7 @@
     if (!['/work', '/about', '/contact'].includes(normalized)) return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    const target = `${sitePath(`${normalized}/`)}${normalized === '/work' ? workCacheVersion : ''}`;
-    window.location.assign(target);
+    window.location.assign(sitePath(`${normalized}/`));
   };
   document.addEventListener('click', routeInternalNavigation, true);
   document.addEventListener('auxclick', routeInternalNavigation, true);
