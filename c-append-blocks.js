@@ -1,6 +1,49 @@
 (async () => {
   'use strict';
 
+  const isExternalNavigation = (value) => {
+    if (!value || /^(data:|blob:|javascript:|#)/i.test(value)) return false;
+    if (/^(mailto:|tel:|sms:|discord:|intent:)/i.test(value)) return true;
+    try {
+      const url = new URL(value, document.baseURI || location.href);
+      return /^https?:$/i.test(url.protocol) && url.origin !== location.origin;
+    } catch {
+      return false;
+    }
+  };
+  const disableExternalLinks = (root = document) => {
+    if (!root?.querySelectorAll) return;
+    root.querySelectorAll('a[href], area[href]').forEach((link) => {
+      const href = link.getAttribute('href');
+      if (!isExternalNavigation(href)) return;
+      link.dataset.externalUrl = href;
+      link.removeAttribute('href');
+      link.removeAttribute('target');
+    });
+    root.querySelectorAll('*').forEach((node) => {
+      if (node.shadowRoot) disableExternalLinks(node.shadowRoot);
+    });
+  };
+  const blockExternalNavigation = (event) => {
+    if (event.type === 'keydown' && event.key !== 'Enter') return;
+    const target = event.target instanceof Element
+      ? event.target.closest('a[href], area[href]')
+      : null;
+    if (!target || !isExternalNavigation(target.getAttribute('href'))) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  };
+  document.addEventListener('click', blockExternalNavigation, true);
+  document.addEventListener('auxclick', blockExternalNavigation, true);
+  document.addEventListener('keydown', blockExternalNavigation, true);
+  disableExternalLinks();
+  new MutationObserver(() => disableExternalLinks()).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['href', 'target'],
+    childList: true,
+    subtree: true,
+  });
+
   const originalFetch = window.fetch.bind(window);
   const sourceRoot = (key) => {
     const host = document.createElement('div');
@@ -13,10 +56,15 @@
   const specialUrl = (value) => /^(data:|blob:|mailto:|javascript:|#)/i.test(value);
   const localUrl = (value, base) => {
     const isRootPath = value.startsWith('/');
-    const pageBase = new URL('.', document.baseURI).pathname.replace(/\/$/, '');
+    const documentBase = document.baseURI || location.href;
+    const pageBase = new URL('.', documentBase).pathname.replace(/\/$/, '');
     if (isRootPath && pageBase && (value === pageBase || value.startsWith(`${pageBase}/`))) return value;
-    const candidate = isRootPath ? `.${value}` : value;
-    const url = new URL(candidate, isRootPath ? document.baseURI : base);
+    const projectPrefix = '/seiya-digital-atelier';
+    const normalizedValue = isRootPath && (value === projectPrefix || value.startsWith(`${projectPrefix}/`))
+      ? value.slice(projectPrefix.length) || '/'
+      : value;
+    const candidate = isRootPath ? `.${normalizedValue}` : normalizedValue;
+    const url = new URL(candidate, isRootPath ? documentBase : base);
     return `${url.pathname}${url.search}${url.hash}`;
   };
   const resolveUrl = (value, basePath, sourceHost) => {
@@ -38,8 +86,8 @@
     }
     try {
       const base = basePath && basePath !== '/'
-        ? new URL(`${basePath.replace(/\/$/, '')}/`, document.baseURI)
-        : document.baseURI;
+        ? new URL(`${basePath.replace(/\/$/, '')}/`, document.baseURI || location.href)
+        : (document.baseURI || location.href);
       return localUrl(mapped, base);
     } catch {
       return sourceHost ? `${sourceHost}/${mapped}` : mapped;
@@ -910,6 +958,9 @@
     const root = document.querySelector('[data-framer-root]') || document.body;
     const main = root.querySelector('main[data-framer-name="Main"]');
     const howItWorks = root.querySelector('section[data-framer-name="How it Works"]');
+    const processDescriptionStyle = document.createElement('style');
+    processDescriptionStyle.textContent = '#how-we-work .framer-1kwm7vy { max-width: 400px; }';
+    document.head.append(processDescriptionStyle);
     const cCss = scopedShadowCss(await sourceStyles(cSource));
     await appendCBlock('c-ticker', cSource.document.querySelector('.ticker'), cSource, main, cCss);
     await appendCBlock('c-selected-work', cSource.document.querySelector('#work'), cSource, howItWorks, cCss, 'Selected Work');
