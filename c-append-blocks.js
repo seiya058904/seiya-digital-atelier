@@ -13,6 +13,8 @@
   const specialUrl = (value) => /^(data:|blob:|mailto:|javascript:|#)/i.test(value);
   const localUrl = (value, base) => {
     const isRootPath = value.startsWith('/');
+    const pageBase = new URL('.', document.baseURI).pathname.replace(/\/$/, '');
+    if (isRootPath && pageBase && (value === pageBase || value.startsWith(`${pageBase}/`))) return value;
     const candidate = isRootPath ? `.${value}` : value;
     const url = new URL(candidate, isRootPath ? document.baseURI : base);
     return `${url.pathname}${url.search}${url.hash}`;
