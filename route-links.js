@@ -1,5 +1,6 @@
 (() => {
-  const projectPrefix = location.pathname === '/seiya-digital-atelier'
+  const projectPrefix = location.hostname === 'seiya058904.github.io'
+    || location.pathname === '/seiya-digital-atelier'
     || location.pathname.startsWith('/seiya-digital-atelier/')
     ? '/seiya-digital-atelier'
     : '';
@@ -8,6 +9,12 @@
     if (path === projectPrefix || path.startsWith(`${projectPrefix}/`)) return path;
     return `${projectPrefix}${path.startsWith('/') ? path : `/${path}`}`;
   };
+  const routes = Object.freeze({
+    home: sitePath('/#hero'),
+    work: sitePath('/work/'),
+    about: sitePath('/about/'),
+    contact: sitePath('/contact/'),
+  });
   const routePath = () => {
     const path = location.pathname.replace(/\/+$/, '') || '/';
     return projectPrefix && (path === projectPrefix || path.startsWith(`${projectPrefix}/`))
@@ -20,6 +27,35 @@
     return projectPrefix && (path === projectPrefix || path.startsWith(`${projectPrefix}/`))
       ? path.slice(projectPrefix.length) || '/'
       : path;
+  };
+  const routeTarget = (value) => {
+    const raw = String(value || '').trim();
+    const rawPath = raw.split('#')[0];
+    const withoutHash = rawPath.replace(/\/+$/, '');
+    const hash = raw.includes('#') ? raw.slice(raw.indexOf('#')) : '';
+    const isRelativeHome = !rawPath || /^(?:\.\.\/|\.\/)+$/.test(rawPath) || rawPath === '..' || rawPath === '.';
+    if (hash === '#hero' && isRelativeHome) return routes.home;
+    if (isRelativeHome) return null;
+    const token = withoutHash.replace(/^(?:\.\.\/|\.\/|\/)+/, '').replace(/\/+$/, '');
+    if (token === 'work') return routes.work;
+    if (token === 'about') return routes.about;
+    if (token === 'contact') return routes.contact;
+    try {
+      const path = normalizePath(raw);
+      return path === '/' ? routes.home
+        : path === '/work' ? routes.work
+        : path === '/about' ? routes.about
+        : path === '/contact' ? routes.contact
+        : null;
+    } catch {
+      return null;
+    }
+  };
+  const normalizeSiteLinks = () => {
+    document.querySelectorAll('a[href], area[href]').forEach((link) => {
+      const target = routeTarget(link.getAttribute('href'));
+      if (target && link.getAttribute('href') !== target) link.setAttribute('href', target);
+    });
   };
   const routeInternalNavigation = (event) => {
     if (event.type === 'keydown' && event.key !== 'Enter') return;
@@ -56,7 +92,7 @@
   };
   const normalizeProjectAssets = () => {
     if (!projectPrefix) return;
-    document.querySelectorAll('[src], [srcset], [poster]').forEach((node) => {
+    document.querySelectorAll('[src], [srcset], [poster], [style]').forEach((node) => {
       for (const attribute of ['src', 'poster']) {
         const value = node.getAttribute(attribute);
         if (value?.startsWith('/assets/')) node.setAttribute(attribute, `${projectPrefix}${value}`);
@@ -66,6 +102,11 @@
         const next = srcset.replace(/(^|\s)(\/assets\/)/g, `$1${projectPrefix}$2`);
         if (next !== srcset) node.setAttribute('srcset', next);
       }
+      const style = node.getAttribute('style');
+      if (style) node.setAttribute('style', style.replace(/url\(\s*(['"]?)\/assets\//g, `url($1${projectPrefix}/assets/`));
+    });
+    document.querySelectorAll('style').forEach((style) => {
+      style.textContent = style.textContent.replace(/url\(\s*(['"]?)\/assets\//g, `url($1${projectPrefix}/assets/`);
     });
   };
   const isProjectCardNavigation = (value) => {
@@ -82,6 +123,7 @@
       if (!isProjectCardNavigation(link.getAttribute('href'))) return;
       link.removeAttribute('href');
       link.removeAttribute('target');
+      link.removeAttribute('rel');
       link.dataset.navigationDisabled = 'true';
     });
   };
@@ -123,6 +165,8 @@
   document.addEventListener('click', block, true);
   document.addEventListener('auxclick', block, true);
   document.addEventListener('keydown', block, true);
+  document.addEventListener('pointerdown', blockProjectCardNavigation, true);
+  document.addEventListener('pointerup', blockProjectCardNavigation, true);
   document.addEventListener('click', blockProjectCardNavigation, true);
   document.addEventListener('auxclick', blockProjectCardNavigation, true);
   document.addEventListener('keydown', blockProjectCardNavigation, true);
@@ -139,24 +183,24 @@
       event.preventDefault();
       event.stopImmediatePropagation();
       try { sessionStorage.setItem('seiya-home-transition', '1'); } catch {}
-      window.location.assign(sitePath('/?from=route-home#hero'));
+      window.location.assign(routes.home);
       return;
     }
-    if (link.textContent.trim() !== 'Seiya') return;
     const url = new URL(link.getAttribute('href'), document.baseURI || location.href);
-    if (url.hash !== '#hero') return;
+    if (url.hash !== '#hero' || normalizePath(url.pathname) !== '/') return;
     event.preventDefault();
     event.stopImmediatePropagation();
     try { sessionStorage.setItem('seiya-home-transition', '1'); } catch {}
-    window.location.assign(sitePath('/?from=route-logo#hero'));
+    window.location.assign(routes.home);
   };
   const installHomeGuards = () => {
     document.querySelectorAll('a[href]').forEach((link) => {
       const label = link.textContent.trim();
       const isHome = label === 'Home';
-      const isLogo = label === 'Seiya' && new URL(link.getAttribute('href'), document.baseURI).hash === '#hero';
+      const logoUrl = new URL(link.getAttribute('href'), document.baseURI);
+      const isLogo = logoUrl.hash === '#hero' && normalizePath(logoUrl.pathname) === '/';
       if ((!isHome && !isLogo) || link.dataset.homeGuardInstalled === 'true') return;
-      const target = isHome ? sitePath('/?from=route-home#hero') : sitePath('/?from=route-logo#hero');
+      const target = routes.home;
       const forceNavigation = (event) => {
         if (event.type === 'keydown' && event.key !== 'Enter') return;
         event.preventDefault();
@@ -214,10 +258,10 @@
     replaceFooterText(footer, replacements);
     const footerLinks = [...footer.querySelectorAll('a')];
     const paths = new Map([
-      ['Home', sitePath('/?from=route-home#hero')],
-      ['Projects', sitePath('/work/')],
-      ['About Me', sitePath('/about/')],
-      ['Contact', sitePath('/contact/')],
+      ['Home', routes.home],
+      ['Projects', routes.work],
+      ['About Me', routes.about],
+      ['Contact', routes.contact],
       ['GitHub', 'https://github.com/seiya058904/seiya-digital-atelier'],
       ['Email', 'mailto:sunmengsaiyi@gmail.com'],
     ]);
@@ -272,6 +316,7 @@
   document.addEventListener('submit', openContactDraft, true);
   const updateRoute = () => {
     normalizeFooter();
+    normalizeSiteLinks();
     applyAboutChanges();
     applyWorkChanges();
     normalizeProjectAssets();
@@ -282,7 +327,7 @@
   updateRoute();
   new MutationObserver(updateRoute).observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ['href', 'target', 'src', 'srcset', 'poster'],
+    attributeFilter: ['href', 'target', 'src', 'srcset', 'poster', 'style'],
     childList: true,
     subtree: true,
   });

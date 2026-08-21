@@ -80,6 +80,7 @@
       if (!isProjectCardNavigation(link.getAttribute('href'))) return;
       link.removeAttribute('href');
       link.removeAttribute('target');
+      link.removeAttribute('rel');
       link.dataset.navigationDisabled = 'true';
     });
     root.querySelectorAll('*').forEach((node) => {
@@ -126,6 +127,8 @@
   document.addEventListener('click', blockExternalNavigation, true);
   document.addEventListener('auxclick', blockExternalNavigation, true);
   document.addEventListener('keydown', blockExternalNavigation, true);
+  document.addEventListener('pointerdown', blockProjectCardNavigation, true);
+  document.addEventListener('pointerup', blockProjectCardNavigation, true);
   document.addEventListener('click', blockProjectCardNavigation, true);
   document.addEventListener('auxclick', blockProjectCardNavigation, true);
   document.addEventListener('keydown', blockProjectCardNavigation, true);
