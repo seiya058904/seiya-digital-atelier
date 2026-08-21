@@ -13,6 +13,7 @@
     }
 
     requestUrl.searchParams.delete("range");
+    requestUrl.searchParams.set("_cms", "0288424");
     const response = await nativeFetch(requestUrl, init);
     if (!response.ok) return response;
 
