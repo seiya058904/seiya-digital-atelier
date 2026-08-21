@@ -90,19 +90,26 @@
       link.removeAttribute('target');
     });
   };
-  const normalizeProjectAssets = () => {
+  const normalizeProjectAsset = (node) => {
     if (!projectPrefix) return;
-    document.querySelectorAll('[src], [srcset], [poster]').forEach((node) => {
-      for (const attribute of ['src', 'poster']) {
-        const value = node.getAttribute(attribute);
-        if (value?.startsWith('/assets/')) node.setAttribute(attribute, `${projectPrefix}${value}`);
-      }
-      const srcset = node.getAttribute('srcset');
-      if (srcset) {
-        const next = srcset.replace(/(^|\s)(\/assets\/)/g, `$1${projectPrefix}$2`);
-        if (next !== srcset) node.setAttribute('srcset', next);
-      }
-    });
+    if (!(node instanceof Element)) return;
+    for (const attribute of ['src', 'poster']) {
+      const value = node.getAttribute(attribute);
+      if (value?.startsWith('/assets/')) node.setAttribute(attribute, `${projectPrefix}${value}`);
+    }
+    const srcset = node.getAttribute('srcset');
+    if (srcset) {
+      const next = srcset.replace(/(^|[\s,])(\/assets\/)/g, `$1${projectPrefix}$2`);
+      if (next !== srcset) node.setAttribute('srcset', next);
+    }
+    if (node instanceof HTMLLinkElement) {
+      const href = node.getAttribute('href');
+      if (href?.startsWith('/assets/')) node.setAttribute('href', `${projectPrefix}${href}`);
+    }
+  };
+  const normalizeProjectAssets = (root = document) => {
+    normalizeProjectAsset(root);
+    root.querySelectorAll?.('[src], [srcset], [poster], link[href]').forEach(normalizeProjectAsset);
   };
   const disableProjectCardLinks = () => globalThis.SeiyaWorkCardGuard?.process();
   const redirectConfiguredLink = (event) => {
@@ -295,9 +302,12 @@
     childList: true,
     subtree: true,
   });
-  new MutationObserver(normalizeProjectAssets).observe(document.documentElement, {
+  new MutationObserver((mutations) => mutations.forEach((mutation) => {
+    if (mutation.type === 'attributes') normalizeProjectAsset(mutation.target);
+    mutation.addedNodes.forEach(normalizeProjectAssets);
+  })).observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ['src', 'srcset', 'poster'],
+    attributeFilter: ['src', 'srcset', 'poster', 'href'],
     childList: true,
     subtree: true,
   });
