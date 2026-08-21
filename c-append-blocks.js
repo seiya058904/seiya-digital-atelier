@@ -1,6 +1,13 @@
 (async () => {
   'use strict';
 
+  const projectPrefix = location.pathname === '/seiya-digital-atelier'
+    || location.pathname.startsWith('/seiya-digital-atelier/')
+    ? '/seiya-digital-atelier'
+    : '';
+  const repositoryPrefix = '/seiya-digital-atelier';
+  const sitePath = (path) => `${projectPrefix}${path}`;
+
   const isExternalNavigation = (value) => {
     if (!value || /^(data:|blob:|javascript:|#)/i.test(value)) return false;
     if (/^(mailto:|tel:|sms:|discord:|intent:)/i.test(value)) return true;
@@ -55,7 +62,8 @@
   const isProjectCardNavigation = (value) => {
     if (!value) return false;
     try {
-      const path = new URL(value, document.baseURI || location.href).pathname.replace(/\/$/, '');
+      const path = new URL(value, document.baseURI || location.href).pathname
+        .replace(projectPrefix, '').replace(/\/$/, '') || '/';
       return /^\/work\/(nadina|halo-form|verdan-core|arcwell|lumen-grid|nova-atlas)$/i.test(path)
         || /^\/source\/works(?:\/|$)/i.test(path);
     } catch {
@@ -163,9 +171,8 @@
     const documentBase = document.baseURI || location.href;
     const pageBase = new URL('.', documentBase).pathname.replace(/\/$/, '');
     if (isRootPath && pageBase && (value === pageBase || value.startsWith(`${pageBase}/`))) return value;
-    const projectPrefix = '/seiya-digital-atelier';
-    const normalizedValue = isRootPath && (value === projectPrefix || value.startsWith(`${projectPrefix}/`))
-      ? value.slice(projectPrefix.length) || '/'
+    const normalizedValue = isRootPath && (value === repositoryPrefix || value.startsWith(`${repositoryPrefix}/`))
+      ? value.slice(repositoryPrefix.length) || '/'
       : value;
     const candidate = isRootPath ? `.${normalizedValue}` : normalizedValue;
     const url = new URL(candidate, isRootPath ? documentBase : base);
@@ -174,12 +181,12 @@
   const resolveUrl = (value, basePath, sourceHost) => {
     if (!value || specialUrl(value)) return value;
     const mapped = value
-      .replaceAll('http://localhost:8776/_assets', '/assets/mirror-b')
-      .replaceAll('http://localhost:8775/_assets', '/assets/main')
-      .replaceAll('http://localhost:8776', '/assets/mirror-b')
-      .replaceAll('http://localhost:8775', '/assets/main')
-      .replaceAll('/assets/mirror-b/_assets', '/assets/mirror-b')
-      .replaceAll('/assets/main/_assets', '/assets/main');
+      .replaceAll('http://localhost:8776/_assets', sitePath('/assets/mirror-b'))
+      .replaceAll('http://localhost:8775/_assets', sitePath('/assets/main'))
+      .replaceAll('http://localhost:8776', sitePath('/assets/mirror-b'))
+      .replaceAll('http://localhost:8775', sitePath('/assets/main'))
+      .replaceAll('/assets/mirror-b/_assets', sitePath('/assets/mirror-b'))
+      .replaceAll('/assets/main/_assets', sitePath('/assets/main'));
     if (/^https?:\/\//i.test(mapped)) {
       try {
         const url = new URL(mapped);
@@ -200,6 +207,28 @@
   const reviseG5ImageUrl = (value) => value.includes('G5V2BfFS1k2hTxiBqkphqzLkVNc') && !value.includes('asset-rev=')
     ? `${value}${value.includes('?') ? '&' : '?'}asset-rev=20260821-2`
     : value;
+  const normalizeRepositoryPaths = (root = document) => {
+    root.querySelectorAll?.('[src], [srcset], [poster]').forEach((element) => {
+      for (const attribute of ['src', 'poster']) {
+        const value = element.getAttribute(attribute);
+        if (!value) continue;
+        const next = projectPrefix
+          ? (value.startsWith('/assets/') ? `${projectPrefix}${value}` : value)
+          : value.startsWith(`${repositoryPrefix}/`) ? value.slice(repositoryPrefix.length) : value;
+        if (next !== value) element.setAttribute(attribute, next);
+      }
+      const value = element.getAttribute('srcset');
+      if (!value) return;
+      const next = value.split(',').map((item) => {
+        const [url, ...descriptor] = item.trim().split(/\s+/);
+        const normalized = projectPrefix
+          ? (url.startsWith('/assets/') ? `${projectPrefix}${url}` : url)
+          : url.startsWith(`${repositoryPrefix}/`) ? url.slice(repositoryPrefix.length) : url;
+        return [normalized, ...descriptor].join(' ');
+      }).join(',');
+      if (next !== value) element.setAttribute('srcset', next);
+    });
+  };
   const rewriteCss = (css, basePath) => css.replace(/url\(\s*(["']?)([^"')]+)\1\s*\)/gi, (match, quote, value) => {
     if (specialUrl(value)) return match;
     return `url("${resolveUrl(value, basePath)}")`;
@@ -1139,6 +1168,13 @@
     await appendCBlock('c-selected-work', cSource.document.querySelector('#work'), cSource, howItWorks, cCss, 'Selected Work');
     await appendMirrorB(mirrorB, howItWorks);
     await appendIntegrations(personal, howItWorks);
+    normalizeRepositoryPaths();
+    new MutationObserver(() => normalizeRepositoryPaths()).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['src', 'srcset', 'poster'],
+      childList: true,
+      subtree: true,
+    });
     placeStableBlocks();
     const stableRoot = document.querySelector('#main');
     if (stableRoot) new MutationObserver(placeStableBlocks).observe(stableRoot, { childList: true, subtree: true });

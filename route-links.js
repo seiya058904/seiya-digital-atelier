@@ -1,4 +1,22 @@
 (() => {
+  const projectPrefix = location.pathname === '/seiya-digital-atelier'
+    || location.pathname.startsWith('/seiya-digital-atelier/')
+    ? '/seiya-digital-atelier'
+    : '';
+  const sitePath = (path) => `${projectPrefix}${path}`;
+  const routePath = () => {
+    const path = location.pathname.replace(/\/+$/, '') || '/';
+    return projectPrefix && (path === projectPrefix || path.startsWith(`${projectPrefix}/`))
+      ? path.slice(projectPrefix.length) || '/'
+      : path;
+  };
+  const currentRoute = routePath;
+  const normalizePath = (value) => {
+    const path = new URL(value, document.baseURI || location.href).pathname.replace(/\/+$/, '') || '/';
+    return projectPrefix && (path === projectPrefix || path.startsWith(`${projectPrefix}/`))
+      ? path.slice(projectPrefix.length) || '/'
+      : path;
+  };
   const isExternal = (value) => {
     if (!value || /^(data:|blob:|javascript:|#)/i.test(value)) return false;
     if (/^(mailto:|tel:|sms:|discord:|intent:)/i.test(value)) return true;
@@ -22,7 +40,7 @@
   const isProjectCardNavigation = (value) => {
     if (!value) return false;
     try {
-      const path = new URL(value, document.baseURI || location.href).pathname.replace(/\/$/, '');
+      const path = normalizePath(value);
       return /^\/work\/(nadina|halo-form|verdan-core|arcwell|lumen-grid|nova-atlas)$/i.test(path);
     } catch {
       return false;
@@ -90,7 +108,7 @@
       event.preventDefault();
       event.stopImmediatePropagation();
       try { sessionStorage.setItem('seiya-home-transition', '1'); } catch {}
-      window.location.assign('/?from=route-home#hero');
+      window.location.assign(sitePath('/?from=route-home#hero'));
       return;
     }
     if (link.textContent.trim() !== 'Seiya') return;
@@ -99,7 +117,7 @@
     event.preventDefault();
     event.stopImmediatePropagation();
     try { sessionStorage.setItem('seiya-home-transition', '1'); } catch {}
-    window.location.assign('/?from=route-logo#hero');
+    window.location.assign(sitePath('/?from=route-logo#hero'));
   };
   const installHomeGuards = () => {
     document.querySelectorAll('a[href]').forEach((link) => {
@@ -107,7 +125,7 @@
       const isHome = label === 'Home';
       const isLogo = label === 'Seiya' && new URL(link.getAttribute('href'), document.baseURI).hash === '#hero';
       if ((!isHome && !isLogo) || link.dataset.homeGuardInstalled === 'true') return;
-      const target = isHome ? '/?from=route-home#hero' : '/?from=route-logo#hero';
+      const target = isHome ? sitePath('/?from=route-home#hero') : sitePath('/?from=route-logo#hero');
       const forceNavigation = (event) => {
         if (event.type === 'keydown' && event.key !== 'Enter') return;
         event.preventDefault();
@@ -121,7 +139,6 @@
       link.dataset.homeGuardInstalled = 'true';
     });
   };
-  const currentRoute = () => location.pathname.replace(/\/+$/, '') || '/';
   const leafNodes = (root) => [...root.querySelectorAll('*')]
     .filter((node) => node.children.length === 0 && node.textContent.trim());
   const replaceFooterText = (root, replacements) => {
@@ -166,10 +183,10 @@
     replaceFooterText(footer, replacements);
     const footerLinks = [...footer.querySelectorAll('a')];
     const paths = new Map([
-      ['Home', '/?from=route-home#hero'],
-      ['Projects', '/work'],
-      ['About Me', '/about'],
-      ['Contact', '/contact'],
+      ['Home', sitePath('/?from=route-home#hero')],
+      ['Projects', sitePath('/work')],
+      ['About Me', sitePath('/about')],
+      ['Contact', sitePath('/contact')],
       ['GitHub', 'https://github.com/seiya058904/seiya-digital-atelier'],
       ['Email', 'mailto:sunmengsaiyi@gmail.com'],
     ]);
