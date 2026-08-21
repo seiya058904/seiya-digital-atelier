@@ -3,7 +3,7 @@
 
   globalThis.fetch = async (input, init) => {
     const requestUrl = new URL(
-      typeof input === 'string' ? input : input.url,
+      typeof input === 'string' ? input : input instanceof URL ? input.href : input.url,
       window.location.href,
     );
     const range = requestUrl.searchParams.get("range");
