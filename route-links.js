@@ -22,6 +22,19 @@
       ? path.slice(projectPrefix.length) || '/'
       : path;
   };
+  const routeInternalNavigation = (event) => {
+    if (event.type === 'keydown' && event.key !== 'Enter') return;
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (!link || link.dataset.navigationDisabled === 'true') return;
+    const path = normalizePath(link.getAttribute('href'));
+    if (!['/work', '/about', '/contact'].includes(path)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    window.location.assign(sitePath(`${path}/`));
+  };
+  document.addEventListener('click', routeInternalNavigation, true);
+  document.addEventListener('auxclick', routeInternalNavigation, true);
+  document.addEventListener('keydown', routeInternalNavigation, true);
   const isExternal = (value) => {
     if (!value || /^(data:|blob:|javascript:|#)/i.test(value)) return false;
     if (/^(mailto:|tel:|sms:|discord:|intent:)/i.test(value)) return true;

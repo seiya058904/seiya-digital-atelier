@@ -248,6 +248,21 @@
       if (href !== next) link.setAttribute('href', next);
     });
   };
+  const routeInternalNavigation = (event) => {
+    if (event.type === 'keydown' && event.key !== 'Enter') return;
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (!link || link.dataset.navigationDisabled === 'true') return;
+    let path;
+    try { path = new URL(link.getAttribute('href'), document.baseURI || location.href).pathname; } catch { return; }
+    const normalized = path.replace(projectPrefix, '').replace(/\/+$/, '') || '/';
+    if (!['/work', '/about', '/contact'].includes(normalized)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    window.location.assign(sitePath(`${normalized}/`));
+  };
+  document.addEventListener('click', routeInternalNavigation, true);
+  document.addEventListener('auxclick', routeInternalNavigation, true);
+  document.addEventListener('keydown', routeInternalNavigation, true);
   const rewriteCss = (css, basePath) => css.replace(/url\(\s*(["']?)([^"')]+)\1\s*\)/gi, (match, quote, value) => {
     if (specialUrl(value)) return match;
     return `url("${resolveUrl(value, basePath)}")`;
