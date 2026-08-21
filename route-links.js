@@ -92,7 +92,7 @@
   };
   const normalizeProjectAssets = () => {
     if (!projectPrefix) return;
-    document.querySelectorAll('[src], [srcset], [poster], [style]').forEach((node) => {
+    document.querySelectorAll('[src], [srcset], [poster]').forEach((node) => {
       for (const attribute of ['src', 'poster']) {
         const value = node.getAttribute(attribute);
         if (value?.startsWith('/assets/')) node.setAttribute(attribute, `${projectPrefix}${value}`);
@@ -102,44 +102,9 @@
         const next = srcset.replace(/(^|\s)(\/assets\/)/g, `$1${projectPrefix}$2`);
         if (next !== srcset) node.setAttribute('srcset', next);
       }
-      const style = node.getAttribute('style');
-      if (style) {
-        const nextStyle = style.replace(/url\(\s*(['"]?)\/assets\//g, `url($1${projectPrefix}/assets/`);
-        if (nextStyle !== style) node.setAttribute('style', nextStyle);
-      }
-    });
-    document.querySelectorAll('style').forEach((style) => {
-      const next = style.textContent.replace(/url\(\s*(['"]?)\/assets\//g, `url($1${projectPrefix}/assets/`);
-      if (next !== style.textContent) style.textContent = next;
     });
   };
-  const isProjectCardNavigation = (value) => {
-    if (!value) return false;
-    try {
-      const path = normalizePath(value);
-      return /^\/work\/(nadina|halo-form|verdan-core|arcwell|lumen-grid|nova-atlas)$/i.test(path);
-    } catch {
-      return false;
-    }
-  };
-  const disableProjectCardLinks = () => {
-    document.querySelectorAll('a[href]').forEach((link) => {
-      if (!isProjectCardNavigation(link.getAttribute('href'))) return;
-      link.removeAttribute('href');
-      link.removeAttribute('target');
-      link.removeAttribute('rel');
-      link.dataset.navigationDisabled = 'true';
-    });
-  };
-  const blockProjectCardNavigation = (event) => {
-    if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
-    const target = event.composedPath().find((node) =>
-      node instanceof Element && node.dataset.navigationDisabled === 'true'
-    );
-    if (!target) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-  };
+  const disableProjectCardLinks = () => globalThis.SeiyaWorkCardGuard?.process();
   const redirectConfiguredLink = (event) => {
     if (event.type === 'keydown' && event.key !== 'Enter') return;
     const link = event.target instanceof Element
@@ -169,11 +134,6 @@
   document.addEventListener('click', block, true);
   document.addEventListener('auxclick', block, true);
   document.addEventListener('keydown', block, true);
-  document.addEventListener('pointerdown', blockProjectCardNavigation, true);
-  document.addEventListener('pointerup', blockProjectCardNavigation, true);
-  document.addEventListener('click', blockProjectCardNavigation, true);
-  document.addEventListener('auxclick', blockProjectCardNavigation, true);
-  document.addEventListener('keydown', blockProjectCardNavigation, true);
   document.addEventListener('click', redirectConfiguredLink, true);
   document.addEventListener('auxclick', redirectConfiguredLink, true);
   document.addEventListener('keydown', redirectConfiguredLink, true);
@@ -323,15 +283,21 @@
     normalizeSiteLinks();
     applyAboutChanges();
     applyWorkChanges();
-    normalizeProjectAssets();
     disable();
     disableProjectCardLinks();
     installHomeGuards();
   };
   updateRoute();
+  normalizeProjectAssets();
   new MutationObserver(updateRoute).observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ['href', 'target', 'src', 'srcset', 'poster', 'style'],
+    attributeFilter: ['href', 'target', 'rel'],
+    childList: true,
+    subtree: true,
+  });
+  new MutationObserver(normalizeProjectAssets).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['src', 'srcset', 'poster'],
     childList: true,
     subtree: true,
   });

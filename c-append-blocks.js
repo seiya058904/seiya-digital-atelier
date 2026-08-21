@@ -63,30 +63,7 @@
     event.preventDefault();
     event.stopImmediatePropagation();
   };
-  const isProjectCardNavigation = (value) => {
-    if (!value) return false;
-    try {
-      const path = new URL(value, document.baseURI || location.href).pathname
-        .replace(projectPrefix, '').replace(/\/$/, '') || '/';
-      return /^\/work\/(nadina|halo-form|verdan-core|arcwell|lumen-grid|nova-atlas)$/i.test(path)
-        || /^\/source\/works(?:\/|$)/i.test(path);
-    } catch {
-      return false;
-    }
-  };
-  const disableProjectCardLinks = (root = document) => {
-    if (!root?.querySelectorAll) return;
-    root.querySelectorAll('a[href]').forEach((link) => {
-      if (!isProjectCardNavigation(link.getAttribute('href'))) return;
-      link.removeAttribute('href');
-      link.removeAttribute('target');
-      link.removeAttribute('rel');
-      link.dataset.navigationDisabled = 'true';
-    });
-    root.querySelectorAll('*').forEach((node) => {
-      if (node.shadowRoot) disableProjectCardLinks(node.shadowRoot);
-    });
-  };
+  const disableProjectCardLinks = (root = document) => globalThis.SeiyaWorkCardGuard?.process(root);
   const applyFooterTargets = () => {
     document.querySelectorAll('footer a').forEach((link) => {
       const label = link.textContent.trim();
@@ -99,15 +76,6 @@
         link.dataset.allowExternal = 'true';
       }
     });
-  };
-  const blockProjectCardNavigation = (event) => {
-    if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
-    const target = event.composedPath().find((node) =>
-      node instanceof Element && node.dataset.navigationDisabled === 'true'
-    );
-    if (!target) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
   };
   const redirectConfiguredLink = (event) => {
     if (event.type === 'keydown' && event.key !== 'Enter') return;
@@ -127,11 +95,6 @@
   document.addEventListener('click', blockExternalNavigation, true);
   document.addEventListener('auxclick', blockExternalNavigation, true);
   document.addEventListener('keydown', blockExternalNavigation, true);
-  document.addEventListener('pointerdown', blockProjectCardNavigation, true);
-  document.addEventListener('pointerup', blockProjectCardNavigation, true);
-  document.addEventListener('click', blockProjectCardNavigation, true);
-  document.addEventListener('auxclick', blockProjectCardNavigation, true);
-  document.addEventListener('keydown', blockProjectCardNavigation, true);
   document.addEventListener('click', redirectConfiguredLink, true);
   document.addEventListener('auxclick', redirectConfiguredLink, true);
   document.addEventListener('keydown', redirectConfiguredLink, true);
