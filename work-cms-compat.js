@@ -8,8 +8,12 @@
     );
     const range = requestUrl.searchParams.get("range");
 
-    if (!range || !requestUrl.pathname.includes('/framerusercontent.com/cms/')) {
+    if (!requestUrl.pathname.includes('/framerusercontent.com/cms/')) {
       return nativeFetch(input, init);
+    }
+    if (!range) {
+      requestUrl.searchParams.set('_cms', '0288424');
+      return nativeFetch(requestUrl, init);
     }
 
     requestUrl.searchParams.delete("range");
