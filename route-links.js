@@ -3,7 +3,7 @@
     || location.pathname.startsWith('/seiya-digital-atelier/')
     ? '/seiya-digital-atelier'
     : '';
-  const workCacheVersion = '?v=e39bb71';
+  const workCacheVersion = '?v=4918e53';
   const sitePath = (path) => {
     if (!projectPrefix) return path;
     const current = location.pathname.slice(projectPrefix.length);
