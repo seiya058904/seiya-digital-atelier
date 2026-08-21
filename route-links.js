@@ -3,6 +3,7 @@
     || location.pathname.startsWith('/seiya-digital-atelier/')
     ? '/seiya-digital-atelier'
     : '';
+  const workCacheVersion = '?v=e39bb71';
   const sitePath = (path) => {
     if (!projectPrefix) return path;
     const current = location.pathname.slice(projectPrefix.length);
@@ -30,7 +31,8 @@
     if (!['/work', '/about', '/contact'].includes(path)) return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    window.location.assign(sitePath(`${path}/`));
+    const target = `${sitePath(`${path}/`)}${path === '/work' ? workCacheVersion : ''}`;
+    window.location.assign(target);
   };
   document.addEventListener('click', routeInternalNavigation, true);
   document.addEventListener('auxclick', routeInternalNavigation, true);
