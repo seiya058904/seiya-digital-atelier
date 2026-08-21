@@ -1,0 +1,1153 @@
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura — Context-first AI landing pages</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+.w-anim{display:inline-block;opacity:0;filter:blur(8px);transform:translateY(16px);animation:wordIn .8s cubic-bezier(.22,1,.36,1) forwards;}@keyframes wordIn{to{opacity:1;filter:blur(0);transform:translateY(0);}}.grad-border{border:1px solid transparent!important;background-image:linear-gradient(#F7F4ED,#F7F4ED),linear-gradient(135deg,rgba(185,106,74,.5),rgba(142,156,117,.75),rgba(59,75,52,.7))!important;background-origin:border-box!important;background-clip:padding-box,border-box!important;}.btn-lift{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,background-color .3s ease,color .3s ease;will-change:transform;}.btn-lift:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 16px 32px -14px rgba(23,21,18,.45);}.btn-lift:active{transform:translateY(0) scale(.96);box-shadow:0 6px 14px -8px rgba(23,21,18,.35);}@media (prefers-reduced-motion: reduce){.w-anim{animation:none;opacity:1;filter:none;transform:none;}}
+</style>
+</head>
+  <body class="bg-[#F2EEE5] text-[#171512] antialiased" style="font-family:'Inter',sans-serif; scroll-behavior:smooth; --serif:'Cormorant Garamond',serif;">
+    <!-- ===================== HEADER ===================== -->
+    <header class="sticky top-0 z-50 border-b border-[#171512]/5" style="background:rgba(242,238,229,0.82); backdrop-filter:blur(14px);">
+      <div class="mx-auto max-w-[1200px] px-5 md:px-8 h-16 flex items-center justify-between">
+        <a href="#" class="text-xl md:text-2xl font-semibold tracking-tight" style="font-family:var(--serif);">
+          Aura.
+        </a>
+        <nav class="hidden md:flex items-center gap-8 text-sm text-[#6F6B62]">
+          <a href="#gallery" class="hover:text-[#171512] transition-colors">
+            Gallery
+          </a>
+          <a href="#workflow" class="hover:text-[#171512] transition-colors">
+            Workflow
+          </a>
+          <a href="#media" class="hover:text-[#171512] transition-colors">
+            Media
+          </a>
+          <a href="#pricing" class="hover:text-[#171512] transition-colors">
+            Pricing
+          </a>
+          <a href="#learn" class="hover:text-[#171512] transition-colors">
+            Learn
+          </a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <a href="#pricing" aria-label="Start building with Aura" class="rounded-full bg-[#171512] text-[#F2EEE5] text-sm font-medium px-5 py-2.5 hover:bg-[#3B4B34] transition-colors btn-lift">
+            Start Building
+          </a>
+          <button aria-label="Open menu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-[#171512]/10">
+            <iconify-icon icon="solar:hamburger-menu-linear" class="text-lg"></iconify-icon>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="relative overflow-hidden">
+      <div class="mx-auto max-w-[1200px] px-5 md:px-8 pt-16 md:pt-24 pb-0 text-center">
+        <p class="reveal text-xs font-medium tracking-[0.22em] text-[#8E9C75] uppercase">
+          AI Page Builder With Real Context
+        </p>
+        <h1 class="reveal mt-6 tracking-tight" style="font-family:var(--serif); font-weight:500; line-height:1.0;">
+          <span class="block text-5xl md:text-7xl lg:text-8xl">
+            Landing pages
+          </span>
+          <span class="block text-5xl md:text-7xl lg:text-8xl">
+            built from real
+          </span>
+          <span class="block text-5xl md:text-7xl lg:text-8xl italic text-[#3B4B34]">
+            context
+          </span>
+        </h1>
+        <p class="reveal mx-auto mt-7 max-w-xl text-base md:text-lg text-[#6F6B62] leading-relaxed">
+          Aura turns DESIGN.md files, screenshots, prompts, product notes, and
+          media direction into polished landing pages you can edit, export, and
+          publish.
+        </p>
+        <div class="reveal mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="#pricing" class="rounded-full bg-[#171512] text-[#F2EEE5] text-sm font-medium px-7 py-3.5 hover:bg-[#3B4B34] transition-colors btn-lift">
+            Create First Page
+          </a>
+          <a href="#workflow" class="rounded-full border border-[#171512]/15 text-sm font-medium px-7 py-3.5 text-[#171512] hover:bg-[#171512]/5 transition-colors flex items-center gap-2 btn-lift">
+            <iconify-icon icon="solar:play-circle-linear" class="text-lg"></iconify-icon>
+            Watch Workflow
+          </a>
+        </div>
+        <div class="reveal mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-[#9A948A] font-medium">
+          <span>DESIGN.md</span>
+          <span class="w-1 h-1 rounded-full bg-[#9A948A]/50"></span>
+          <span>Screenshots</span>
+          <span class="w-1 h-1 rounded-full bg-[#9A948A]/50"></span>
+          <span>Rich Images</span>
+          <span class="w-1 h-1 rounded-full bg-[#9A948A]/50"></span>
+          <span>Video Loops</span>
+          <span class="w-1 h-1 rounded-full bg-[#9A948A]/50"></span>
+          <span>HTML Export</span>
+        </div>
+      </div>
+
+      <!-- Hero product visual -->
+      <div class="relative mt-14 md:mt-20">
+        <!-- soft landscape atmosphere -->
+        <div class="absolute inset-x-0 bottom-0 h-[65%]" style="background:linear-gradient(180deg, rgba(142,156,117,0) 0%, rgba(142,156,117,0.35) 30%, rgba(59,75,52,0.55) 100%);">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/683b6840-f866-4ed4-b2b7-ee853cb9c27a_3840w.webp" alt="" class="absolute inset-0 w-full h-full object-cover opacity-40" style="mask-image:linear-gradient(180deg,transparent,black 45%);-webkit-mask-image:linear-gradient(180deg,transparent,black 45%);" loading="lazy">
+          <div class="parallax absolute inset-0 opacity-70" style="background:radial-gradient(ellipse 70% 60% at 30% 80%, rgba(59,75,52,0.5), transparent), radial-gradient(ellipse 60% 50% at 75% 90%, rgba(142,156,117,0.6), transparent); filter:blur(40px);"></div>
+        </div>
+        <div class="relative mx-auto max-w-[1080px] px-5 md:px-8 pb-16 md:pb-24">
+          <div class="reveal rounded-[26px] p-2 md:p-3" style="background:rgba(255,253,248,0.45); backdrop-filter:blur(22px); border:1px solid rgba(255,255,255,0.7); box-shadow:0 40px 80px -30px rgba(23,21,18,0.35);">
+            <div class="rounded-[20px] overflow-hidden bg-[#FBF9F4] flex" style="aspect-ratio:16/9.5;">
+              <!-- sidebar -->
+              <aside class="hidden md:flex w-44 flex-col border-r border-[#171512]/6 bg-[#F6F3EC] p-4 gap-1 text-sm">
+                <p class="font-semibold tracking-tight mb-3" style="font-family:var(--serif);">
+                  Aura.
+                </p>
+                <a href="#" class="flex items-center gap-2.5 rounded-xl px-3 py-2 bg-[#3B4B34] text-[#F2EEE5] text-xs font-medium">
+                  <iconify-icon icon="solar:layers-minimalistic-linear"></iconify-icon>
+                  Context
+                </a>
+                <a href="#" class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[#6F6B62] text-xs hover:bg-[#171512]/5">
+                  <iconify-icon icon="solar:widget-4-linear"></iconify-icon>
+                  Sections
+                </a>
+                <a href="#" class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[#6F6B62] text-xs hover:bg-[#171512]/5">
+                  <iconify-icon icon="solar:gallery-wide-linear"></iconify-icon>
+                  Media
+                </a>
+                <a href="#" class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[#6F6B62] text-xs hover:bg-[#171512]/5">
+                  <iconify-icon icon="solar:export-linear"></iconify-icon>
+                  Export
+                </a>
+              </aside>
+              <!-- main -->
+              <div class="flex-1 p-4 md:p-6 overflow-hidden">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm md:text-base font-medium">
+                      Welcome back, Maya
+                    </p>
+                    <p class="text-xs text-[#9A948A] mt-0.5">
+                      Active project · Launch page draft
+                    </p>
+                  </div>
+                  <div class="hidden sm:flex gap-2">
+                    <span class="rounded-full bg-[#8E9C75]/20 text-[#3B4B34] text-xs font-medium px-3 py-1.5">
+                      Ready to refine
+                    </span>
+                    <span class="rounded-full bg-[#B96A4A]/15 text-[#B96A4A] text-xs font-medium px-3 py-1.5">
+                      Media queued
+                    </span>
+                    <span class="rounded-full bg-[#171512]/8 text-[#6F6B62] text-xs font-medium px-3 py-1.5">
+                      Export available
+                    </span>
+                  </div>
+                </div>
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-5 gap-3">
+                  <!-- context sources -->
+                  <div class="md:col-span-2 rounded-2xl border border-[#171512]/8 bg-white/70 p-4">
+                    <p class="text-xs font-semibold text-[#6F6B62] uppercase tracking-wider mb-3">
+                      Context Sources
+                    </p>
+                    <ul class="space-y-2.5 text-xs text-[#171512]">
+                      <li class="flex items-center gap-2">
+                        <iconify-icon icon="solar:document-text-linear" class="text-[#3B4B34]"></iconify-icon>
+                        DESIGN.md imported
+                      </li>
+                      <li class="flex items-center gap-2">
+                        <iconify-icon icon="solar:gallery-linear" class="text-[#3B4B34]"></iconify-icon>
+                        6 screenshot references
+                      </li>
+                      <li class="flex items-center gap-2">
+                        <iconify-icon icon="solar:notes-linear" class="text-[#3B4B34]"></iconify-icon>
+                        Product notes added
+                      </li>
+                      <li class="flex items-center gap-2">
+                        <iconify-icon icon="solar:users-group-rounded-linear" class="text-[#3B4B34]"></iconify-icon>
+                        Audience: founders and creators
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- generated sections -->
+                  <div class="md:col-span-3 rounded-2xl border border-[#171512]/8 bg-white/70 p-4">
+                    <p class="text-xs font-semibold text-[#6F6B62] uppercase tracking-wider mb-3">
+                      Generated Sections
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                      <span class="rounded-lg bg-[#3B4B34] text-[#F2EEE5] text-xs px-3 py-1.5">
+                        Hero
+                      </span>
+                      <span class="rounded-lg bg-[#8E9C75]/25 text-[#3B4B34] text-xs px-3 py-1.5">
+                        Proof
+                      </span>
+                      <span class="rounded-lg bg-[#8E9C75]/25 text-[#3B4B34] text-xs px-3 py-1.5">
+                        Media
+                      </span>
+                      <span class="rounded-lg bg-[#8E9C75]/25 text-[#3B4B34] text-xs px-3 py-1.5">
+                        Pricing
+                      </span>
+                      <span class="rounded-lg bg-[#171512]/6 text-[#6F6B62] text-xs px-3 py-1.5">
+                        FAQ
+                      </span>
+                    </div>
+                    <!-- generation progress timeline (not analytics) -->
+                    <p class="text-xs text-[#9A948A] mb-2">
+                      Page generation progress
+                    </p>
+                    <div class="flex items-end gap-1.5 h-12">
+                      <div class="w-full rounded-t bg-[#8E9C75]/40" style="height:35%"></div>
+                      <div class="w-full rounded-t bg-[#8E9C75]/55" style="height:55%"></div>
+                      <div class="w-full rounded-t bg-[#8E9C75]/70" style="height:45%"></div>
+                      <div class="w-full rounded-t bg-[#3B4B34]/80" style="height:75%"></div>
+                      <div class="w-full rounded-t bg-[#3B4B34]" style="height:95%"></div>
+                      <div class="w-full rounded-t bg-[#8E9C75]/60" style="height:65%"></div>
+                      <div class="w-full rounded-t bg-[#8E9C75]/35" style="height:40%"></div>
+                      <div class="w-full rounded-t bg-[#171512]/10" style="height:25%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PROOF RIBBON ===================== -->
+    <section class="relative overflow-hidden" style="background:linear-gradient(120deg, #151812 0%, #20251A 55%, #2A3322 100%);">
+      <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/variants/4d5c54f2-1ad1-4f26-84dd-c97cdb8d167c/3840w.jpg" alt="" class="absolute inset-0 w-full h-full object-cover opacity-25" loading="lazy">
+      <div class="parallax absolute inset-0 opacity-40" style="background:radial-gradient(ellipse 60% 90% at 20% 50%, rgba(142,156,117,0.45), transparent), radial-gradient(ellipse 50% 80% at 85% 40%, rgba(59,75,52,0.6), transparent); filter:blur(50px);"></div>
+      <div class="relative mx-auto max-w-[1200px] px-5 md:px-8 py-14 md:py-16 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+        <p class="max-w-xl text-2xl md:text-3xl tracking-tight text-[#F2EEE5] leading-snug" style="font-family:var(--serif); font-weight:500;">
+          Blank prompts make blank pages.
+          <span class="text-[#8E9C75] italic">Context</span>
+          gives the model something to design with.
+        </p>
+        <!-- PLACEHOLDER WORKFLOW METRICS: replace values before publishing -->
+        <div class="flex gap-10 md:gap-14">
+          <div>
+            <p class="counter text-3xl md:text-4xl tracking-tight text-[#F2EEE5]" data-suffix="m" data-target="18" style="font-family:var(--serif);">
+              0m
+            </p>
+            <p class="mt-1 text-xs text-[#9A948A]">sample first draft</p>
+          </div>
+          <div>
+            <p class="counter text-3xl md:text-4xl tracking-tight text-[#F2EEE5]" data-target="9" style="font-family:var(--serif);">
+              0
+            </p>
+            <p class="mt-1 text-xs text-[#9A948A]">media slots</p>
+          </div>
+          <div>
+            <p class="counter text-3xl md:text-4xl tracking-tight text-[#F2EEE5]" data-target="4" style="font-family:var(--serif);">
+              0
+            </p>
+            <p class="mt-1 text-xs text-[#9A948A]">export paths</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== POSITIONING ===================== -->
+    <section id="workflow" class="bg-[#F2EEE5] py-20 md:py-28">
+      <div class="mx-auto max-w-[1200px] px-5 md:px-8 text-center">
+        <h2 class="reveal text-4xl md:text-5xl lg:text-6xl tracking-tight" style="font-family:var(--serif); font-weight:500;">
+          Built for teams who
+          <br class="hidden md:block">
+          design with context
+        </h2>
+        <p class="reveal mx-auto mt-6 max-w-xl text-base md:text-lg text-[#6F6B62] leading-relaxed">
+          Aura keeps the product story, visual system, and media direction close
+          to the page, so every generation starts with more than a blank prompt.
+        </p>
+        <!-- workflow quantities, not business claims -->
+        <div class="reveal mt-14 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4">
+          <div class="rounded-3xl border border-[#171512]/8 bg-[#F7F4ED] p-8">
+            <p class="text-4xl md:text-5xl tracking-tight" style="font-family:var(--serif);">
+              1
+            </p>
+            <p class="mt-2 text-sm text-[#6F6B62]">DESIGN.md source</p>
+          </div>
+          <div class="rounded-3xl border border-[#171512]/8 bg-[#F7F4ED] p-8">
+            <p class="text-4xl md:text-5xl tracking-tight" style="font-family:var(--serif);">
+              12
+            </p>
+            <p class="mt-2 text-sm text-[#6F6B62]">reference inputs</p>
+          </div>
+          <div class="rounded-3xl border border-[#171512]/8 bg-[#F7F4ED] p-8">
+            <p class="text-4xl md:text-5xl tracking-tight" style="font-family:var(--serif);">
+              3
+            </p>
+            <p class="mt-2 text-sm text-[#6F6B62]">media modes</p>
+          </div>
+          <div class="rounded-3xl border border-[#171512]/8 bg-[#F7F4ED] p-8">
+            <p class="text-4xl md:text-5xl tracking-tight" style="font-family:var(--serif);">
+              5
+            </p>
+            <p class="mt-2 text-sm text-[#6F6B62]">handoff paths</p>
+          </div>
+        </div>
+        <a href="#gallery" class="reveal mt-10 inline-flex items-center gap-2 rounded-full border border-[#171512]/15 px-6 py-3 text-sm font-medium hover:bg-[#171512]/5 transition-colors btn-lift">
+          See the build loop
+          <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================== FEATURE CAROUSEL ===================== -->
+    <section id="gallery" class="bg-[#EDE8DD] py-20 md:py-28 overflow-hidden">
+      <div class="mx-auto max-w-[1200px] px-5 md:px-8">
+        <div class="flex items-end justify-between gap-6">
+          <h2 class="reveal text-4xl md:text-5xl tracking-tight max-w-lg" style="font-family:var(--serif); font-weight:500;">
+            Built to work the way builders think
+          </h2>
+          <div class="hidden md:flex gap-2">
+            <button id="carPrev" aria-label="Previous feature" class="w-11 h-11 rounded-full border border-[#171512]/15 flex items-center justify-center hover:bg-[#171512]/5 transition-colors btn-lift">
+              <iconify-icon icon="solar:arrow-left-linear" class="text-lg"></iconify-icon>
+            </button>
+            <button id="carNext" aria-label="Next feature" class="w-11 h-11 rounded-full border border-[#171512]/15 flex items-center justify-center hover:bg-[#171512]/5 transition-colors btn-lift">
+              <iconify-icon icon="solar:arrow-right-linear" class="text-lg"></iconify-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="carousel" class="mt-10 flex gap-5 overflow-x-auto px-5 md:px-[max(2rem,calc((100vw-1200px)/2+2rem))] snap-x snap-mandatory pt-4 pb-20 -mb-16" style="scrollbar-width:none;">
+        <!-- Card 1 -->
+        <article class="snap-start shrink-0 w-[85vw] sm:w-[420px] rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.35) 0px 30px 60px -20px, rgba(59, 75, 52, 0.25) 0px 8px 20px -12px;">
+          <div class="relative overflow-hidden" style="aspect-ratio:16/10;">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/75c477f9-7736-4ffa-bfb3-3d9289e29962_3840w.png" alt="Design workspace with context references" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy">
+            <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(180deg,rgba(23,21,18,0) 55%,rgba(23,21,18,0.35) 100%);"></div>
+          </div>
+          <div class="p-6 md:p-7">
+            <h3 class="text-xl tracking-tight font-medium" style="font-family:var(--serif); font-weight:600;">
+              Context dashboard
+            </h3>
+            <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+              Collect DESIGN.md, screenshots, product notes, audience, offer,
+              and visual rules before generation starts.
+            </p>
+          </div>
+        </article>
+        <!-- Card 2 -->
+        <article class="snap-start shrink-0 w-[85vw] sm:w-[420px] rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.35) 0px 30px 60px -20px, rgba(59, 75, 52, 0.25) 0px 8px 20px -12px;">
+          <div class="relative overflow-hidden" style="aspect-ratio:16/10;">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/704ab5c4-d5f4-4e93-b0e7-13c65162fb8a_3840w.png" alt="Team sketching page directions on a whiteboard" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy">
+            <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(180deg,rgba(23,21,18,0) 55%,rgba(23,21,18,0.35) 100%);"></div>
+          </div>
+          <div class="p-6 md:p-7">
+            <h3 class="text-xl tracking-tight" style="font-family:var(--serif); font-weight:600;">
+              AI page assistant
+            </h3>
+            <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+              Ask for stronger hero copy, tighter proof, richer sections, or a
+              new visual direction without rebuilding from scratch.
+            </p>
+          </div>
+        </article>
+        <!-- Card 3 -->
+        <article id="media" class="snap-start shrink-0 w-[85vw] sm:w-[420px] rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.35) 0px 30px 60px -20px, rgba(59, 75, 52, 0.25) 0px 8px 20px -12px;">
+          <div class="relative overflow-hidden" style="aspect-ratio:16/10;">
+            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" alt="Camera and media production setup" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy">
+            <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(180deg,rgba(23,21,18,0) 55%,rgba(23,21,18,0.35) 100%);"></div>
+          </div>
+          <div class="p-6 md:p-7">
+            <h3 class="text-xl tracking-tight" style="font-family:var(--serif); font-weight:600;">
+              Contextual media
+            </h3>
+            <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+              Generate page images and short video loops from the section they
+              belong to, not from generic stock prompts.
+            </p>
+          </div>
+        </article>
+        <!-- Card 4 -->
+        <article class="snap-start shrink-0 w-[85vw] sm:w-[420px] rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.35) 0px 30px 60px -20px, rgba(59, 75, 52, 0.25) 0px 8px 20px -12px;">
+          <div class="relative overflow-hidden" style="aspect-ratio:16/10;">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e1e85daf-f76c-4486-9b1e-eb8013a84068_3840w.png" alt="Code editor open on a laptop for export" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy">
+            <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(180deg,rgba(23,21,18,0) 55%,rgba(23,21,18,0.35) 100%);"></div>
+          </div>
+          <div class="p-6 md:p-7">
+            <h3 class="text-xl tracking-tight" style="font-family:var(--serif); font-weight:600;">
+              Export and publish
+            </h3>
+            <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+              Move from draft to HTML, Figma handoff, React-ready sections, or a
+              shareable publish link.
+            </p>
+          </div>
+        </article>
+        <!-- Card 5 -->
+        <article class="snap-start shrink-0 w-[85vw] sm:w-[420px] rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.35) 0px 30px 60px -20px, rgba(59, 75, 52, 0.25) 0px 8px 20px -12px;">
+          <div class="relative overflow-hidden" style="aspect-ratio:16/10;">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/98ec1895-273a-461b-a1c0-97960180c77c_3840w.png" alt="Minimal desk with consistent design system notes" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy">
+            <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(180deg,rgba(23,21,18,0) 55%,rgba(23,21,18,0.35) 100%);"></div>
+          </div>
+          <div class="p-6 md:p-7">
+            <h3 class="text-xl tracking-tight" style="font-family:var(--serif); font-weight:600;">
+              Design memory
+            </h3>
+            <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+              Reuse saved style rules so the next page feels like the same
+              product, not a new random template.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== INTEGRATIONS ===================== -->
+    <section class="bg-[#F2EEE5] py-20 md:py-28">
+      <div class="mx-auto max-w-[1200px] px-5 md:px-8 text-center">
+        <h2 class="reveal text-4xl md:text-5xl tracking-tight" style="font-family:var(--serif); font-weight:500;">
+          Connect the tools that
+          <br class="hidden md:block">
+          hold your context
+        </h2>
+        <p class="reveal mx-auto mt-5 max-w-xl text-base text-[#6F6B62] leading-relaxed">
+          Aura can start from the places where your product work already lives:
+          design files, docs, repos, project notes, and launch assets.
+        </p>
+        <div class="reveal relative mx-auto mt-14 max-w-[760px]" style="aspect-ratio:16/8;">
+          <!-- connection lines -->
+          <svg class="absolute inset-0 w-full h-full" viewBox="0 0 760 380" fill="none" aria-hidden="true">
+            <path d="M380 190 L110 80 M380 190 L640 90 M380 190 L90 260 M380 190 L660 270 M380 190 L250 330 M380 190 L510 40" stroke="#8E9C75" stroke-opacity="0.35" stroke-width="1" stroke-dasharray="3 5"></path>
+          </svg>
+          <!-- center mark -->
+          <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-[#3B4B34] flex items-center justify-center text-[#F2EEE5] text-2xl tracking-tight" style="font-family:var(--serif); box-shadow:0 20px 40px -15px rgba(59,75,52,0.5);">
+            A.
+          </div>
+          <!-- orbit icons -->
+          <div class="float-slow absolute" style="left:9%; top:12%;">
+            <div class="w-14 h-14 rounded-full bg-[#F7F4ED] border border-[#171512]/8 flex items-center justify-center shadow-sm" title="Figma">
+              <iconify-icon icon="solar:figma-file-linear" class="text-xl text-[#3B4B34]"></iconify-icon>
+            </div>
+            <p class="mt-1.5 text-xs text-[#9A948A] text-center">Figma</p>
+          </div>
+          <div class="float-slow absolute" style="left:63%; top:2%; animation-delay:.6s;">
+            <div class="w-14 h-14 rounded-full bg-[#F7F4ED] border border-[#171512]/8 flex items-center justify-center shadow-sm" title="Notion">
+              <iconify-icon icon="solar:notebook-linear" class="text-xl text-[#3B4B34]"></iconify-icon>
+            </div>
+            <p class="mt-1.5 text-xs text-[#9A948A] text-center">Notion</p>
+          </div>
+          <div class="float-slow absolute" style="left:81%; top:16%; animation-delay:1.2s;">
+            <div class="w-14 h-14 rounded-full bg-[#F7F4ED] border border-[#171512]/8 flex items-center justify-center shadow-sm" title="GitHub">
+              <iconify-icon icon="solar:code-square-linear" class="text-xl text-[#3B4B34]"></iconify-icon>
+            </div>
+            <p class="mt-1.5 text-xs text-[#9A948A] text-center">GitHub</p>
+          </div>
+          <div class="float-slow absolute" style="left:4%; top:60%; animation-delay:.9s;">
+            <div class="w-14 h-14 rounded-full bg-[#F7F4ED] border border-[#171512]/8 flex items-center justify-center shadow-sm" title="Google Drive">
+              <iconify-icon icon="solar:folder-cloud-linear" class="text-xl text-[#3B4B34]"></iconify-icon>
+            </div>
+            <p class="mt-1.5 text-xs text-[#9A948A] text-center">Drive</p>
+          </div>
+          <div class="float-slow absolute" style="left:84%; top:62%; animation-delay:1.6s;">
+            <div class="w-14 h-14 rounded-full bg-[#F7F4ED] border border-[#171512]/8 flex items-center justify-center shadow-sm" title="Slack">
+              <iconify-icon icon="solar:chat-round-line-linear" class="text-xl text-[#3B4B34]"></iconify-icon>
+            </div>
+            <p class="mt-1.5 text-xs text-[#9A948A] text-center">Slack</p>
+          </div>
+          <div class="float-slow absolute" style="left:28%; top:78%; animation-delay:.3s;">
+            <div class="w-14 h-14 rounded-full bg-[#F7F4ED] border border-[#171512]/8 flex items-center justify-center shadow-sm" title="Linear">
+              <iconify-icon icon="solar:checklist-minimalistic-linear" class="text-xl text-[#3B4B34]"></iconify-icon>
+            </div>
+            <p class="mt-1.5 text-xs text-[#9A948A] text-center">Linear</p>
+          </div>
+          <div class="float-slow absolute" style="left:58%; top:76%; animation-delay:1.9s;">
+            <div class="w-14 h-14 rounded-full bg-[#F7F4ED] border border-[#171512]/8 flex items-center justify-center shadow-sm" title="Webflow">
+              <iconify-icon icon="solar:global-linear" class="text-xl text-[#3B4B34]"></iconify-icon>
+            </div>
+            <p class="mt-1.5 text-xs text-[#9A948A] text-center">Webflow</p>
+          </div>
+          <div class="float-slow absolute" style="left:34%; top:0%; animation-delay:1.4s;">
+            <div class="w-14 h-14 rounded-full bg-[#F7F4ED] border border-[#171512]/8 flex items-center justify-center shadow-sm" title="Framer">
+              <iconify-icon icon="solar:layers-linear" class="text-xl text-[#3B4B34]"></iconify-icon>
+            </div>
+            <p class="mt-1.5 text-xs text-[#9A948A] text-center">Framer</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TESTIMONIAL ===================== -->
+    <!-- NOTE: Placeholder testimonial. Replace with a real customer quote before publishing. -->
+    <section class="bg-[#EDE8DD] py-20 md:py-28">
+      <div class="mx-auto max-w-[1200px] px-5 md:px-8 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div class="reveal relative rounded-[26px] overflow-hidden" style="aspect-ratio:4/3.4; box-shadow:0 40px 80px -30px rgba(23,21,18,0.5), 0 12px 30px -18px rgba(59,75,52,0.4);">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cd8902f8-dbb0-405d-b436-da90139af1b3_3840w.png" alt="Team reviewing a landing page draft together" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+          <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(23,21,18,0.05) 0%,rgba(23,21,18,0.5) 100%);"></div>
+          <div class="absolute left-6 right-6 bottom-6 rounded-2xl p-4" style="background:rgba(255,253,248,0.25); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.4);">
+            <p class="text-xs text-[#F2EEE5]/80 uppercase tracking-wider">
+              Reviewing draft · Launch page
+            </p>
+            <div class="mt-3 flex gap-2">
+              <div class="h-14 flex-1 rounded-lg bg-white/30"></div>
+              <div class="h-14 flex-1 rounded-lg bg-white/20"></div>
+              <div class="h-14 flex-1 rounded-lg bg-white/15"></div>
+            </div>
+          </div>
+          <button aria-label="Play review video" class="btn-lift absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full flex items-center justify-center" style="background:rgba(255,253,248,0.3); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.5);">
+            <iconify-icon icon="solar:play-linear" class="text-2xl text-[#F2EEE5]"></iconify-icon>
+          </button>
+        </div>
+        <div class="reveal">
+          <iconify-icon icon="solar:chat-square-like-linear" class="text-3xl text-[#8E9C75]"></iconify-icon>
+          <blockquote class="mt-6 text-2xl md:text-3xl lg:text-4xl tracking-tight leading-snug" style="font-family:var(--serif); font-weight:500;">
+            "We gave Aura our launch notes, screenshots, and DESIGN.md. The
+            first draft already knew what the product was trying to say."
+          </blockquote>
+          <div class="mt-8 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full p-[2px] shrink-0" style="background:linear-gradient(140deg,#B96A4A,#8E9C75); box-shadow:0 10px 22px -10px rgba(23,21,18,0.4);">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&amp;w=200&amp;auto=format&amp;fit=crop" alt="Maya Chen" class="w-full h-full rounded-full object-cover" loading="lazy">
+            </div>
+            <div>
+              <p class="text-sm font-medium">Maya Chen</p>
+              <p class="text-xs text-[#9A948A]">Founder, Northstar Studio</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PRICING ===================== -->
+    <!-- NOTE: Placeholder prices. Replace with real Aura pricing before publishing. -->
+    <section id="pricing" class="bg-[#F2EEE5] py-20 md:py-28">
+      <div class="mx-auto max-w-[1200px] px-5 md:px-8">
+        <div class="text-center">
+          <p class="reveal text-xs font-medium tracking-[0.22em] text-[#8E9C75] uppercase">
+            Build Modes
+          </p>
+          <h2 class="reveal mt-4 text-4xl md:text-5xl tracking-tight" style="font-family:var(--serif); font-weight:500;">
+            Choose how you want to build
+          </h2>
+        </div>
+        <div class="mt-14 grid md:grid-cols-3 gap-5 items-stretch">
+          <!-- Creator -->
+          <div class="reveal rounded-[26px] border border-[#171512]/8 bg-[#F7F4ED] p-8 flex flex-col grad-border" style="box-shadow: rgba(23, 21, 18, 0.28) 0px 24px 50px -24px;">
+            <p class="text-sm font-medium text-[#6F6B62]">Creator</p>
+            <p class="mt-4 flex items-baseline gap-2">
+              <span class="text-5xl tracking-tight" style="font-family:var(--serif);">
+                $19
+              </span>
+              <span class="text-xs text-[#9A948A]">/month placeholder</span>
+            </p>
+            <p class="mt-4 text-sm text-[#6F6B62] leading-relaxed">
+              For solo builders exploring landing page directions from prompts,
+              screenshots, and DESIGN.md.
+            </p>
+            <ul class="mt-6 space-y-3 text-sm flex-1">
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                20 page generations
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                DESIGN.md import
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                Screenshot references
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                HTML export
+              </li>
+            </ul>
+            <a href="#" class="mt-8 rounded-full border border-[#171512]/15 text-sm font-medium px-6 py-3 text-center hover:bg-[#171512]/5 transition-colors btn-lift">
+              Start Creator
+            </a>
+          </div>
+          <!-- Builder (featured) -->
+          <div class="reveal relative rounded-[26px] p-8 flex flex-col text-[#F2EEE5]" style="background:linear-gradient(165deg,#2A3322 0%,#20251A 55%,#151812 100%); box-shadow:0 40px 80px -35px rgba(59,75,52,0.7), 0 0 0 1px rgba(142,156,117,0.25);">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#8E9C75] text-[#151812] text-xs font-semibold px-4 py-1">
+              Most Chosen
+            </div>
+            <p class="text-sm font-medium text-[#8E9C75]">Builder</p>
+            <p class="mt-4 flex items-baseline gap-2">
+              <span class="text-5xl tracking-tight" style="font-family:var(--serif);">
+                $49
+              </span>
+              <span class="text-xs text-[#9A948A]">/month placeholder</span>
+            </p>
+            <p class="mt-4 text-sm text-[#F2EEE5]/70 leading-relaxed">
+              For launch teams creating richer pages with contextual media,
+              revisions, and publish-ready structure.
+            </p>
+            <ul class="mt-6 space-y-3 text-sm flex-1">
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                80 page generations
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                Contextual image batches
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                Video loop prompts
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                Figma handoff
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                Publish links
+              </li>
+            </ul>
+            <a href="#" class="mt-8 rounded-full bg-[#F2EEE5] text-[#151812] text-sm font-medium px-6 py-3 text-center hover:bg-[#8E9C75] transition-colors btn-lift">
+              Start Builder
+            </a>
+          </div>
+          <!-- Studio -->
+          <div class="reveal rounded-[26px] border border-[#171512]/8 bg-[#F7F4ED] p-8 flex flex-col grad-border" style="box-shadow: rgba(23, 21, 18, 0.28) 0px 24px 50px -24px;">
+            <p class="text-sm font-medium text-[#6F6B62]">Studio</p>
+            <p class="mt-4 flex items-baseline gap-2">
+              <span class="text-5xl tracking-tight" style="font-family:var(--serif);">
+                $149
+              </span>
+              <span class="text-xs text-[#9A948A]">/month placeholder</span>
+            </p>
+            <p class="mt-4 text-sm text-[#6F6B62] leading-relaxed">
+              For teams managing multiple product pages, saved design systems,
+              and repeatable launch workflows.
+            </p>
+            <ul class="mt-6 space-y-3 text-sm flex-1">
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                Unlimited saved projects
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                Shared design memory
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                React-ready sections
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                Team workspace
+              </li>
+              <li class="flex items-center gap-2.5">
+                <iconify-icon icon="solar:check-circle-linear" class="text-[#8E9C75] text-lg"></iconify-icon>
+                Priority support
+              </li>
+            </ul>
+            <a href="#" class="mt-8 rounded-full border border-[#171512]/15 text-sm font-medium px-6 py-3 text-center hover:bg-[#171512]/5 transition-colors btn-lift">
+              Talk to Aura
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ROLES ===================== -->
+    <section class="bg-[#EDE8DD] py-20 md:py-28">
+      <div class="mx-auto max-w-[1200px] px-5 md:px-8">
+        <h2 class="reveal text-center text-4xl md:text-5xl tracking-tight" style="font-family:var(--serif); font-weight:500;">
+          Built for the people
+          <br class="hidden md:block">
+          shipping the page
+        </h2>
+        <div class="mt-14 grid md:grid-cols-3 gap-5">
+          <!-- Founder -->
+          <article class="reveal rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.3) 0px 24px 50px -24px;">
+            <div class="relative overflow-hidden" style="aspect-ratio:16/9;">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ff8b51b1-59a1-4636-b17e-b70e134fb121_3840w.png" alt="Founder reviewing a launch plan" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(180deg,rgba(23,21,18,0) 45%,rgba(23,21,18,0.45) 100%);"></div>
+            </div>
+            <div class="p-7">
+              <h3 class="text-xl tracking-tight" style="font-family:var(--serif); font-weight:600;">
+                Founder
+              </h3>
+              <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+                Turn rough launch notes into a page that can be reviewed today.
+              </p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="rounded-lg bg-[#171512]/6 text-xs text-[#6F6B62] px-2.5 py-1.5">
+                  Offer
+                </span>
+                <span class="rounded-lg bg-[#171512]/6 text-xs text-[#6F6B62] px-2.5 py-1.5">
+                  Audience
+                </span>
+                <span class="rounded-lg bg-[#171512]/6 text-xs text-[#6F6B62] px-2.5 py-1.5">
+                  CTA
+                </span>
+              </div>
+            </div>
+          </article>
+          <!-- Designer -->
+          <article class="reveal rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.3) 0px 24px 50px -24px;">
+            <div class="relative overflow-hidden" style="aspect-ratio:16/9;">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c788fd46-8915-4612-840c-e4b4b180d720_3840w.png" alt="Designer working on a visual system" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(180deg,rgba(23,21,18,0) 45%,rgba(23,21,18,0.45) 100%);"></div>
+            </div>
+            <div class="p-7">
+              <h3 class="text-xl tracking-tight" style="font-family:var(--serif); font-weight:600;">
+                Designer
+              </h3>
+              <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+                Keep the visual system consistent through every generation.
+              </p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="rounded-lg bg-[#171512]/6 text-xs text-[#6F6B62] px-2.5 py-1.5">
+                  DESIGN.md
+                </span>
+                <span class="rounded-lg bg-[#171512]/6 text-xs text-[#6F6B62] px-2.5 py-1.5">
+                  Tokens
+                </span>
+                <span class="rounded-lg bg-[#171512]/6 text-xs text-[#6F6B62] px-2.5 py-1.5">
+                  References
+                </span>
+              </div>
+            </div>
+          </article>
+          <!-- Marketer -->
+          <article class="reveal rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.3) 0px 24px 50px -24px;">
+            <div class="relative overflow-hidden" style="aspect-ratio:16/9;">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3cf974a4-ecbf-4478-b612-b7aea1b5137d_3840w.png" alt="Marketing team planning positioning tests" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy">
+              <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(180deg,rgba(23,21,18,0) 45%,rgba(23,21,18,0.45) 100%);"></div>
+            </div>
+            <div class="p-7">
+              <h3 class="text-xl tracking-tight" style="font-family:var(--serif); font-weight:600;">
+                Marketer
+              </h3>
+              <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+                Test sharper positioning, proof, and media without starting
+                over.
+              </p>
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span class="rounded-lg bg-[#171512]/6 text-xs text-[#6F6B62] px-2.5 py-1.5">
+                  Proof
+                </span>
+                <span class="rounded-lg bg-[#171512]/6 text-xs text-[#6F6B62] px-2.5 py-1.5">
+                  Pricing
+                </span>
+                <span class="rounded-lg bg-[#171512]/6 text-xs text-[#6F6B62] px-2.5 py-1.5">
+                  FAQ
+                </span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FAQ ===================== -->
+    <section class="bg-[#F2EEE5] py-20 md:py-28">
+      <div class="mx-auto max-w-[820px] px-5 md:px-8">
+        <div class="text-center">
+          <h2 class="reveal text-4xl md:text-5xl tracking-tight" style="font-family:var(--serif); font-weight:500;">
+            Clearing doubts before you build
+          </h2>
+          <p class="reveal mt-5 text-base text-[#6F6B62]">
+            A quick guide to how Aura uses context, media, and export workflows.
+          </p>
+        </div>
+        <div class="mt-12 space-y-3" id="faq">
+          <div class="faq-item reveal rounded-2xl border border-[#171512]/8 bg-[#F7F4ED] overflow-hidden">
+            <button class="faq-btn w-full flex items-center justify-between gap-4 px-6 py-5 text-left" aria-expanded="false">
+              <span class="text-sm md:text-base font-medium">
+                Do I need a DESIGN.md file?
+              </span>
+              <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-lg text-[#9A948A] shrink-0 transition-transform duration-300"></iconify-icon>
+            </button>
+            <div class="faq-body overflow-hidden transition-all duration-300" style="max-height:0;">
+              <p class="px-6 pb-5 text-sm text-[#6F6B62] leading-relaxed">
+                No. Aura can start from a prompt and screenshots, but a
+                DESIGN.md file gives the model stronger rules for typography,
+                spacing, color, components, and tone.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item reveal rounded-2xl border border-[#171512]/8 bg-[#F7F4ED] overflow-hidden">
+            <button class="faq-btn w-full flex items-center justify-between gap-4 px-6 py-5 text-left" aria-expanded="false">
+              <span class="text-sm md:text-base font-medium">
+                Can I use screenshots as references?
+              </span>
+              <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-lg text-[#9A948A] shrink-0 transition-transform duration-300"></iconify-icon>
+            </button>
+            <div class="faq-body overflow-hidden transition-all duration-300" style="max-height:0;">
+              <p class="px-6 pb-5 text-sm text-[#6F6B62] leading-relaxed">
+                Yes. Use screenshots for composition, visual rhythm, and
+                interaction ideas. Rewrite the brand, copy, metrics, pricing,
+                names, and proof so the result belongs to Aura or your product.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item reveal rounded-2xl border border-[#171512]/8 bg-[#F7F4ED] overflow-hidden">
+            <button class="faq-btn w-full flex items-center justify-between gap-4 px-6 py-5 text-left" aria-expanded="false">
+              <span class="text-sm md:text-base font-medium">
+                Can Aura generate images for each section?
+              </span>
+              <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-lg text-[#9A948A] shrink-0 transition-transform duration-300"></iconify-icon>
+            </button>
+            <div class="faq-body overflow-hidden transition-all duration-300" style="max-height:0;">
+              <p class="px-6 pb-5 text-sm text-[#6F6B62] leading-relaxed">
+                Yes. Aura can create contextual image batches from the
+                surrounding section copy, then you can regenerate the assets
+                that feel off-brand.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item reveal rounded-2xl border border-[#171512]/8 bg-[#F7F4ED] overflow-hidden">
+            <button class="faq-btn w-full flex items-center justify-between gap-4 px-6 py-5 text-left" aria-expanded="false">
+              <span class="text-sm md:text-base font-medium">
+                Can I create video loops?
+              </span>
+              <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-lg text-[#9A948A] shrink-0 transition-transform duration-300"></iconify-icon>
+            </button>
+            <div class="faq-body overflow-hidden transition-all duration-300" style="max-height:0;">
+              <p class="px-6 pb-5 text-sm text-[#6F6B62] leading-relaxed">
+                Yes. Use short loop prompts for hero motion, hover states,
+                product previews, or atmospheric section media.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item reveal rounded-2xl border border-[#171512]/8 bg-[#F7F4ED] overflow-hidden">
+            <button class="faq-btn w-full flex items-center justify-between gap-4 px-6 py-5 text-left" aria-expanded="false">
+              <span class="text-sm md:text-base font-medium">
+                Can I export the page?
+              </span>
+              <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-lg text-[#9A948A] shrink-0 transition-transform duration-300"></iconify-icon>
+            </button>
+            <div class="faq-body overflow-hidden transition-all duration-300" style="max-height:0;">
+              <p class="px-6 pb-5 text-sm text-[#6F6B62] leading-relaxed">
+                Yes. The page supports HTML export, Figma handoff, React-ready
+                sections, or a publish link depending on the build mode.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item reveal rounded-2xl border border-[#171512]/8 bg-[#F7F4ED] overflow-hidden">
+            <button class="faq-btn w-full flex items-center justify-between gap-4 px-6 py-5 text-left" aria-expanded="false">
+              <span class="text-sm md:text-base font-medium">
+                How do I avoid generic AI design?
+              </span>
+              <iconify-icon icon="solar:alt-arrow-down-linear" class="faq-icon text-lg text-[#9A948A] shrink-0 transition-transform duration-300"></iconify-icon>
+            </button>
+            <div class="faq-body overflow-hidden transition-all duration-300" style="max-height:0;">
+              <p class="px-6 pb-5 text-sm text-[#6F6B62] leading-relaxed">
+                Start with real context: product notes, audience, proof,
+                screenshots, visual rules, media direction, and a clear
+                conversion goal. The more specific the inputs, the less the page
+                behaves like a template.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LEARN ===================== -->
+    <section id="learn" class="bg-[#EDE8DD] py-20 md:py-28">
+      <div class="mx-auto max-w-[1200px] px-5 md:px-8">
+        <div class="flex items-end justify-between gap-6">
+          <h2 class="reveal text-4xl md:text-5xl tracking-tight max-w-md" style="font-family:var(--serif); font-weight:500;">
+            Notes on building with context
+          </h2>
+          <a href="#" class="hidden md:inline-flex items-center gap-2 text-sm font-medium text-[#6F6B62] hover:text-[#171512] transition-colors">
+            All notes
+            <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+          </a>
+        </div>
+        <div class="mt-12 grid md:grid-cols-3 gap-5">
+          <article class="reveal group rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.3) 0px 24px 50px -24px;">
+            <div class="overflow-hidden" style="aspect-ratio:16/10;">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c8a4297b-60f5-46b5-94a6-281213225867_3840w.png" alt="Screenshots and references arranged for page direction" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+            </div>
+            <div class="p-7">
+              <p class="text-xs text-[#9A948A]">
+                <span class="text-[#B96A4A] font-medium">Workflow</span>
+                · Placeholder date
+              </p>
+              <h3 class="mt-3 text-lg tracking-tight leading-snug" style="font-family:var(--serif); font-weight:600;">
+                How to turn screenshots into page direction
+              </h3>
+              <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+                Use references for rhythm and composition while keeping the
+                copy, brand, and proof entirely yours.
+              </p>
+            </div>
+          </article>
+          <article class="reveal group rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.3) 0px 24px 50px -24px;">
+            <div class="overflow-hidden" style="aspect-ratio:16/10;">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/55df753a-ee18-4428-a906-042f39242f68_3840w.png" alt="Design system tools and swatches on a desk" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+            </div>
+            <div class="p-7">
+              <p class="text-xs text-[#9A948A]">
+                <span class="text-[#B96A4A] font-medium">Design Systems</span>
+                · Placeholder date
+              </p>
+              <h3 class="mt-3 text-lg tracking-tight leading-snug" style="font-family:var(--serif); font-weight:600;">
+                Why DESIGN.md makes AI pages more consistent
+              </h3>
+              <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+                A short file of typography, spacing, and tone rules turns every
+                generation into the same product.
+              </p>
+            </div>
+          </article>
+          <article class="reveal group rounded-[26px] bg-[#F7F4ED] border border-[#171512]/8 overflow-hidden grad-border" style="box-shadow: rgba(23, 21, 18, 0.3) 0px 24px 50px -24px;">
+            <div class="overflow-hidden" style="aspect-ratio:16/10;">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fb8edf82-f79c-4fda-a079-38d6fd321397_3840w.png" alt="Contextual imagery replacing generic stock visuals" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+            </div>
+            <div class="p-7">
+              <p class="text-xs text-[#9A948A]">
+                <span class="text-[#B96A4A] font-medium">Media</span>
+                · Placeholder date
+              </p>
+              <h3 class="mt-3 text-lg tracking-tight leading-snug" style="font-family:var(--serif); font-weight:600;">
+                How contextual images beat stock visuals
+              </h3>
+              <p class="mt-2 text-sm text-[#6F6B62] leading-relaxed">
+                Generating assets from section copy keeps the imagery tied to
+                what the page is actually saying.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="relative overflow-hidden" style="background:linear-gradient(180deg,#F2EEE5 0%,#DCE0CE 35%,#8E9C75 75%,#3B4B34 100%);">
+      <div class="relative mx-auto max-w-[1200px] px-5 md:px-8 pt-24 md:pt-32 text-center">
+        <h2 class="reveal text-5xl md:text-6xl lg:text-7xl tracking-tight" style="font-family:var(--serif); font-weight:500; line-height:1.0;">
+          See your page
+          <br>
+          in a new light
+        </h2>
+        <p class="reveal mx-auto mt-6 max-w-lg text-base text-[#3B4B34]">
+          Start with the product context you already have. Aura turns it into a
+          landing page you can refine, export, and publish.
+        </p>
+        <div class="reveal mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="#pricing" class="rounded-full bg-[#171512] text-[#F2EEE5] text-sm font-medium px-7 py-3.5 hover:bg-[#3B4B34] transition-colors btn-lift">
+            Create First Page
+          </a>
+          <a href="#gallery" class="rounded-full text-sm font-medium px-7 py-3.5 text-[#171512] transition-colors btn-lift" style="background:rgba(255,253,248,0.4); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.6);">
+            Browse Examples
+          </a>
+        </div>
+
+        <!-- simplified frosted dashboard -->
+        <div class="reveal mx-auto mt-16 max-w-[880px] rounded-t-[26px] p-2 pb-0" style="background:rgba(255,253,248,0.35); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.6); border-bottom:none; box-shadow:0 -20px 60px -30px rgba(23,21,18,0.3);">
+          <div class="rounded-t-[20px] bg-[#FBF9F4]/90 p-5 md:p-7 text-left" style="aspect-ratio:16/6; overflow:hidden;">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-medium">Launch page draft</p>
+              <div class="flex gap-2">
+                <span class="rounded-full bg-[#8E9C75]/25 text-[#3B4B34] text-xs font-medium px-3 py-1.5">
+                  Ready to refine
+                </span>
+                <span class="hidden sm:inline-flex rounded-full bg-[#171512]/8 text-[#6F6B62] text-xs font-medium px-3 py-1.5">
+                  Export available
+                </span>
+              </div>
+            </div>
+            <div class="mt-5 grid grid-cols-3 gap-3">
+              <div class="rounded-xl bg-[#3B4B34]/90 p-3 text-[#F2EEE5]">
+                <p class="text-xs opacity-70">Context</p>
+                <p class="text-sm font-medium mt-1">4 sources</p>
+              </div>
+              <div class="rounded-xl bg-[#8E9C75]/25 p-3">
+                <p class="text-xs text-[#6F6B62]">Sections</p>
+                <p class="text-sm font-medium mt-1">5 generated</p>
+              </div>
+              <div class="rounded-xl bg-[#171512]/6 p-3">
+                <p class="text-xs text-[#6F6B62]">Media</p>
+                <p class="text-sm font-medium mt-1">9 slots</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative border-t border-white/20" style="background:rgba(21,24,18,0.55); backdrop-filter:blur(16px);">
+        <div class="mx-auto max-w-[1200px] px-5 md:px-8 py-14 grid grid-cols-2 md:grid-cols-4 gap-10 text-sm">
+          <div>
+            <p class="text-2xl tracking-tight text-[#F2EEE5]" style="font-family:var(--serif); font-weight:600;">
+              Aura.
+            </p>
+            <p class="mt-3 text-xs text-[#F2EEE5]/60 leading-relaxed">
+              Context-first AI landing pages for founders, designers, and
+              product teams.
+            </p>
+          </div>
+          <nav aria-label="Product">
+            <p class="text-xs font-semibold text-[#F2EEE5]/50 uppercase tracking-wider mb-4">
+              Product
+            </p>
+            <ul class="space-y-2.5 text-[#F2EEE5]/80">
+              <li>
+                <a href="#gallery" class="hover:text-white transition-colors">
+                  Gallery
+                </a>
+              </li>
+              <li>
+                <a href="#workflow" class="hover:text-white transition-colors">
+                  Workflow
+                </a>
+              </li>
+              <li>
+                <a href="#media" class="hover:text-white transition-colors">
+                  Media
+                </a>
+              </li>
+              <li>
+                <a href="#pricing" class="hover:text-white transition-colors">
+                  Pricing
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <nav aria-label="Resources">
+            <p class="text-xs font-semibold text-[#F2EEE5]/50 uppercase tracking-wider mb-4">
+              Resources
+            </p>
+            <ul class="space-y-2.5 text-[#F2EEE5]/80">
+              <li>
+                <a href="#learn" class="hover:text-white transition-colors">
+                  Learn
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors">
+                  Guides
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors">
+                  Examples
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors">
+                  Changelog
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <nav aria-label="Company">
+            <p class="text-xs font-semibold text-[#F2EEE5]/50 uppercase tracking-wider mb-4">
+              Company
+            </p>
+            <ul class="space-y-2.5 text-[#F2EEE5]/80">
+              <li>
+                <a href="#" class="hover:text-white transition-colors">About</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors">
+                  Contact
+                </a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors">Terms</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition-colors">
+                  Privacy
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="border-t border-white/10">
+          <div class="mx-auto max-w-[1200px] px-5 md:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p class="text-sm text-[#F2EEE5]" style="font-family:var(--serif); font-weight:600;">
+              Aura.
+            </p>
+            <p class="text-xs text-[#F2EEE5]/60">
+              Context-first AI landing pages.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Reveal on scroll
+      document.querySelectorAll('.reveal').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = reduced ? 'none' : 'translateY(24px)';
+        el.style.transition = 'opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1)';
+      });
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'translateY(0)';
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+      // Counters (placeholder workflow metrics)
+      const cio = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const el = e.target, target = +el.dataset.target, suf = el.dataset.suffix || '';
+          let start = null;
+          const step = t => {
+            if (!start) start = t;
+            const p = Math.min((t - start) / 1400, 1);
+            el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suf;
+            if (p < 1) requestAnimationFrame(step);
+          };
+          reduced ? el.textContent = target + suf : requestAnimationFrame(step);
+          cio.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      document.querySelectorAll('.counter').forEach(el => cio.observe(el));
+
+      // Parallax (skip if reduced motion)
+      if (!reduced) {
+        const parallaxEls = document.querySelectorAll('.parallax');
+        window.addEventListener('scroll', () => {
+          parallaxEls.forEach(el => {
+            const r = el.getBoundingClientRect();
+            el.style.transform = `translateY(${(r.top - innerHeight / 2) * 0.06}px)`;
+          });
+        }, { passive: true });
+      }
+
+      // Carousel controls
+      const car = document.getElementById('carousel');
+      document.getElementById('carNext')?.addEventListener('click', () => car.scrollBy({ left: 440, behavior: 'smooth' }));
+      document.getElementById('carPrev')?.addEventListener('click', () => car.scrollBy({ left: -440, behavior: 'smooth' }));
+
+      // FAQ accordion
+      document.querySelectorAll('.faq-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const body = btn.nextElementSibling;
+          const icon = btn.querySelector('.faq-icon');
+          const open = btn.getAttribute('aria-expanded') === 'true';
+          document.querySelectorAll('.faq-btn').forEach(b => {
+            b.setAttribute('aria-expanded', 'false');
+            b.nextElementSibling.style.maxHeight = '0';
+            b.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+          });
+          if (!open) {
+            btn.setAttribute('aria-expanded', 'true');
+            body.style.maxHeight = body.scrollHeight + 'px';
+            icon.style.transform = 'rotate(180deg)';
+          }
+        });
+      });
+
+      // Gentle float for integration icons
+      if (!reduced) {
+        const style = document.createElement('style');
+        style.textContent = '@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}} .float-slow{animation:floatY 5s ease-in-out infinite;}';
+        document.head.appendChild(style);
+      }
+    </script>
+
+    <script>
+      (function(){var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduced)return;function split(el,baseDelay,step){var frag=document.createDocumentFragment(),i=0;Array.prototype.slice.call(el.childNodes).forEach(function(n){if(n.nodeType===3){n.textContent.split(/(\s+)/).forEach(function(part){if(!part.trim()){frag.appendChild(document.createTextNode(part));return;}var s=document.createElement('span');s.className='w-anim';s.style.animationDelay=(baseDelay+i*step)+'ms';s.textContent=part;i++;frag.appendChild(s);});}else{frag.appendChild(n);}});el.innerHTML='';el.appendChild(frag);}document.querySelectorAll('h1 > span').forEach(function(line,li){split(line,li*220,90);});var wio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){split(e.target,0,60);wio.unobserve(e.target);}});},{threshold:0.3});document.querySelectorAll('h2').forEach(function(h){wio.observe(h);});document.querySelectorAll('.reveal').forEach(function(el){el.style.filter='blur(10px)';el.style.transition=el.style.transition+', filter .9s cubic-bezier(.22,1,.36,1)';});var bio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.style.filter='blur(0px)';bio.unobserve(e.target);}});},{threshold:0.12});document.querySelectorAll('.reveal').forEach(function(el){bio.observe(el);});})();
+    </script>
+  
+</body></html>

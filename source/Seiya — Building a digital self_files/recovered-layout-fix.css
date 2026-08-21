@@ -1,0 +1,228 @@
+/* Recovery-only fix: keep project titles inside their grid column. */
+@media (min-width: 641px) and (max-width: 1100px) {
+  .project-beat,
+  .project-beat-reverse,
+  .project-beat-story {
+    grid-template-columns: minmax(250px, .85fr) minmax(0, 1.15fr);
+    column-gap: 32px;
+  }
+
+  .project-heading h3 {
+    font-size: clamp(3rem, 6vw, 5.4rem);
+    line-height: .78;
+  }
+}
+
+@media (min-width: 641px) {
+  .project-heading,
+  .project-detail {
+    min-width: 0;
+  }
+}
+
+/* Keep the first and third project media clear of their text columns. */
+@media (min-width: 641px) {
+  .project-beat:not(.project-beat-reverse) .project-media {
+    margin-left: 0;
+    width: 100%;
+    transform: translateX(clamp(28px, 4vw, 64px));
+  }
+}
+
+@media (max-width: 640px) {
+  .project-beat:not(.project-beat-reverse) .project-media {
+    margin-left: 0;
+    width: 100%;
+    transform: none;
+  }
+}
+
+@media (min-width: 641px) {
+  .project-beat.project-beat-story .project-media {
+    margin-left: 0;
+    width: 100%;
+    transform: translateX(clamp(110px, 12vw, 180px)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .project-beat.project-beat-story .project-media {
+    margin-left: 0;
+    width: 100%;
+    transform: none;
+  }
+}
+
+/* Keep all three project media frames equal; preserve the full UI inside them. */
+.project-beat .project-media.is-ui img {
+  width: 100%;
+  height: clamp(300px, 38vw, 560px);
+  aspect-ratio: auto;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 640px) {
+  .project-beat .project-media.is-ui img {
+    height: 300px;
+  }
+}
+
+/* Hardware Monitoring needs a little more separation from its text column. */
+@media (min-width: 641px) {
+  .project-beat:not(.project-beat-reverse):not(.project-beat-story) .project-media {
+    transform: translateX(clamp(70px, 7vw, 105px)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .project-beat:not(.project-beat-reverse):not(.project-beat-story) .project-media {
+    transform: none !important;
+  }
+}
+
+/* Let each media card follow its source image ratio: no crop and no empty band. */
+.project-beat .project-media.is-ui {
+  height: auto;
+}
+
+.project-beat .project-media.is-ui img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: initial;
+}
+
+.hero-a-media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Mirror A Hero layout: a rounded media card with overlay copy and a floating work card. */
+.hero-mirror-a {
+  min-height: calc(100svh - 16px);
+  margin: 0 12px;
+  padding: 86px clamp(56px, 7vw, 92px) 48px;
+  border-radius: 28px;
+  background: #5f7f91;
+  color: #fff;
+}
+
+.hero-mirror-a .hero-a-media {
+  inset: 0;
+  border-radius: 28px;
+}
+
+.hero-mirror-a .hero-a-media::after {
+  background: linear-gradient(180deg, rgba(23, 21, 18, .16), transparent 38%, rgba(23, 21, 18, .48));
+}
+
+.hero-mirror-a .hero-a-topcopy,
+.hero-mirror-a .hero-a-title,
+.hero-mirror-a .hero-a-bottom {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-mirror-a .hero-a-topcopy {
+  align-items: flex-start;
+}
+
+.hero-mirror-a .hero-a-topcopy .eyebrow,
+.hero-mirror-a .hero-a-topcopy .hero-index {
+  color: rgba(255, 255, 255, .82);
+}
+
+.hero-mirror-a .hero-a-title {
+  max-width: 820px;
+  margin: auto 0 40px;
+}
+
+.hero-mirror-a .hero-a-title h1 {
+  max-width: 820px;
+  color: #fff;
+  font-family: Inter, Arial, sans-serif;
+  font-size: clamp(3.4rem, 6.2vw, 6.9rem);
+  line-height: .94;
+  letter-spacing: -.065em;
+}
+
+.hero-mirror-a .hero-a-title h1 em {
+  color: #ffdb73;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+}
+
+.hero-mirror-a .hero-a-bottom {
+  align-items: end;
+}
+
+.hero-mirror-a .hero-a-bottom > p {
+  max-width: 350px;
+  color: rgba(255, 255, 255, .9);
+  font-family: Inter, Arial, sans-serif;
+  font-size: .95rem;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.hero-mirror-a .hero-a-link {
+  position: relative;
+  display: block;
+  width: 240px;
+  min-height: 176px;
+  padding: 14px 14px 86px;
+  border-radius: 20px;
+  background: #fff;
+  color: #202020;
+  font-size: .78rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.hero-a-work-thumb {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  height: 128px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.hero-a-work-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 640px) {
+  .hero-mirror-a {
+    min-height: calc(100svh - 10px);
+    margin: 0 8px;
+    padding: 78px 24px 24px;
+    border-radius: 20px;
+  }
+
+  .hero-mirror-a .hero-a-title h1 {
+    font-size: clamp(2.6rem, 10.7vw, 4.6rem);
+  }
+
+  .hero-mirror-a .hero-a-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .hero-mirror-a .hero-a-link {
+    width: min(240px, 100%);
+  }
+}
+html,
+body {
+  overflow-x: hidden;
+}
