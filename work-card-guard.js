@@ -1,5 +1,5 @@
 (() => {
-  const slugs = new Set(['nadina', 'halo-form', 'verdan-core', 'arcwell', 'lumen-grid', 'nova-atlas']);
+  const slugs = new Set(['nadina', 'halo-form', 'verdan-core', 'arcwell', 'lumen-grid', 'nova-atlas', 'pulma', 'lumex', 'planza', 'horizon-atlas']);
   const getWorkCardSlug = (value, base = globalThis.document?.baseURI || globalThis.location?.href) => {
     if (!value || !base) return null;
     let url;
