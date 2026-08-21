@@ -6,7 +6,12 @@
     ? '/seiya-digital-atelier'
     : '';
   const repositoryPrefix = '/seiya-digital-atelier';
-  const sitePath = (path) => `${projectPrefix}${path}`;
+  const sitePath = (path) => {
+    if (!projectPrefix) return path;
+    const current = location.pathname.slice(projectPrefix.length);
+    const base = current && current !== '/' ? '../' : './';
+    return `${base}${path === '/' ? '' : path.slice(1)}`;
+  };
 
   const isExternalNavigation = (value) => {
     if (!value || /^(data:|blob:|javascript:|#)/i.test(value)) return false;
@@ -238,7 +243,8 @@
       const normalized = path.replace(projectPrefix, '').replace(/\/+$/, '') || '/';
       if (!['/', '/work', '/about', '/contact'].includes(normalized)) return;
       const suffix = href.includes('#') ? href.slice(href.indexOf('#')) : '';
-      const next = sitePath(normalized === '/' ? `/${suffix}` : `${normalized}${suffix}`);
+      const target = normalized === '/' ? `/${suffix}` : `${normalized}/${suffix}`.replace(/\/\/$/, '/');
+      const next = sitePath(target);
       if (href !== next) link.setAttribute('href', next);
     });
   };

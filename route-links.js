@@ -3,7 +3,12 @@
     || location.pathname.startsWith('/seiya-digital-atelier/')
     ? '/seiya-digital-atelier'
     : '';
-  const sitePath = (path) => `${projectPrefix}${path}`;
+  const sitePath = (path) => {
+    if (!projectPrefix) return path;
+    const current = location.pathname.slice(projectPrefix.length);
+    const base = current && current !== '/' ? '../' : './';
+    return `${base}${path === '/' ? '' : path.slice(1)}`;
+  };
   const routePath = () => {
     const path = location.pathname.replace(/\/+$/, '') || '/';
     return projectPrefix && (path === projectPrefix || path.startsWith(`${projectPrefix}/`))
@@ -184,9 +189,9 @@
     const footerLinks = [...footer.querySelectorAll('a')];
     const paths = new Map([
       ['Home', sitePath('/?from=route-home#hero')],
-      ['Projects', sitePath('/work')],
-      ['About Me', sitePath('/about')],
-      ['Contact', sitePath('/contact')],
+      ['Projects', sitePath('/work/')],
+      ['About Me', sitePath('/about/')],
+      ['Contact', sitePath('/contact/')],
       ['GitHub', 'https://github.com/seiya058904/seiya-digital-atelier'],
       ['Email', 'mailto:sunmengsaiyi@gmail.com'],
     ]);
