@@ -18,8 +18,21 @@
     const sourcePath = parts.length === 3 && parts[0] === 'source' && parts[1] === 'works';
     return workPath || doubledWorkPath || sourcePath ? slug : null;
   };
+  const isDisabledWorkDestination = (value, base = globalThis.document?.baseURI || globalThis.location?.href) => {
+    if (getWorkCardSlug(value, base)) return true;
+    if (!value || !base) return false;
+    try {
+      const url = new URL(value, base);
+      if (globalThis.location?.origin && url.origin !== globalThis.location.origin) return false;
+      const parts = url.pathname.split('/').filter(Boolean);
+      if (parts[0] === 'seiya-digital-atelier') parts.shift();
+      return parts.length === 2 && parts[0] === 'source' && parts[1] === 'works';
+    } catch {
+      return false;
+    }
+  };
   const disable = (link) => {
-    if (!(link instanceof HTMLAnchorElement) || !getWorkCardSlug(link.getAttribute('href'))) return;
+    if (!(link instanceof HTMLAnchorElement) || !isDisabledWorkDestination(link.getAttribute('href'))) return;
     link.removeAttribute('href');
     link.removeAttribute('target');
     link.removeAttribute('rel');
@@ -53,10 +66,10 @@
       subtree: true,
     });
   };
-  globalThis.SeiyaWorkCardGuard = { getWorkCardSlug, process };
+  globalThis.SeiyaWorkCardGuard = { getWorkCardSlug, isDisabledWorkDestination, process };
   if (globalThis.document) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
     else install();
   }
-  if (typeof module !== 'undefined') module.exports = { getWorkCardSlug };
+  if (typeof module !== 'undefined') module.exports = { getWorkCardSlug, isDisabledWorkDestination };
 })();

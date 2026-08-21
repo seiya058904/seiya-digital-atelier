@@ -27,3 +27,11 @@ test('normalizes only the ten disabled Work card destinations', () => {
     assert.equal(guard.getWorkCardSlug?.(href, hrefBase), expected, href);
   }
 });
+
+test('disables only the Visual Archive index link', () => {
+  const base = 'http://127.0.0.1:8787/';
+  assert.equal(guard.isDisabledWorkDestination?.('/source/works', base), true);
+  assert.equal(guard.isDisabledWorkDestination?.('/source/works/', base), true);
+  assert.equal(guard.isDisabledWorkDestination?.('/source/works/future-project', base), false);
+  assert.equal(guard.isDisabledWorkDestination?.('/work', base), false);
+});
