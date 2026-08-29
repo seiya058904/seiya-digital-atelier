@@ -86,7 +86,7 @@ const FABRICATION_RESIDUE = {
   'agency pricing / engagement language': ['monthly engagement', 'billed', 'yearly commitment', 'non-refundable', 'Flexible engagement', 'monthly plan', 'pricing work', 'request revisions'],
   'template legal page text': ['Terms of Service', 'Privacy Policy', 'Scope of Services', 'Payment Terms', 'Last updated at'],
   'template footer label': ['Made in'],
-  'agency tone placeholder': ['Tell us about your project'],
+  'agency tone placeholder': ['Tell us about your project', "We're always open!", 'We’re always open!'],
   'template identity / CTA': ['Pulma', 'Irise Studio', 'Rosyid', 'Book a Call', 'Use for Free', 'Explore Mores'],
 };
 
