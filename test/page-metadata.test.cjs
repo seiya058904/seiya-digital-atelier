@@ -142,6 +142,11 @@ test('asset references in page HTML and per-page modules are prefix-safe', () =>
     '5Be2aL3z8dyEFRv_th7XZxGK8Sv-RbSd9MIId_8rhb4.B6FlxEEx.mjs',
     'HGyMz7l0pfDnDfC07YOKKEEK_NLUtFk3mJsFRT_9JmQ.CMKP9VEe.mjs',
   ];
+  // the shared Lenis module injects its stylesheet link at runtime; its href
+  // must compute the project prefix instead of using an absolute path
+  const lenis = fs.readFileSync(base + 'Lenis.CyUs5A_2.mjs', 'utf8');
+  assert.ok(!lenis.includes('href:`/assets/main/'), 'Lenis module injects an absolute stylesheet href');
+  assert.ok(lenis.includes('seiya-digital-atelier'), 'Lenis module lost its prefix computation');
   for (const module of perPageModules) {
     const src = fs.readFileSync(base + module, 'utf8');
     assert.ok(!src.includes("url('/assets/main/"), `${module} contains an absolute CSS mask url`);
