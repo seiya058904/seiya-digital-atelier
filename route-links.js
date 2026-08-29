@@ -228,14 +228,31 @@
   };
   // Framer renders its FAQ accordions as focusable plain divs with no button
   // semantics and no keyboard activation (its tap handler listens for pointer
-  // events). Enhance only those: a focusable div carrying both a question and
-  // an answer — this excludes the hidden Work filter chips, which are short.
+  // events). A control is identified by Framer's own structure: a descendant
+  // answer wrapper carrying an inline opacity style — the collapsible region.
+  // Expanded state is read from that element's computed opacity, which Framer
+  // animates between 0 (closed) and 1 (open); no size heuristics, and no
+  // aria-expanded at all when the answer element cannot be found.
+  const faqAnswerOf = (node) => node.querySelector('div[style*="opacity"]');
   const isFaqControl = (node) => {
     if (node.tagName !== 'DIV' || node.getAttribute('tabindex') !== '0') return false;
-    return node.getBoundingClientRect().height >= 40 && node.textContent.trim().length > 40;
+    return !!faqAnswerOf(node) && node.textContent.trim().length > 40;
   };
   const syncFaqExpanded = (node) => {
-    node.setAttribute('aria-expanded', node.getBoundingClientRect().height > 70 ? 'true' : 'false');
+    const answer = faqAnswerOf(node);
+    if (!answer) return;
+    node.setAttribute('aria-expanded', Number(getComputedStyle(answer).opacity) > 0.5 ? 'true' : 'false');
+  };
+  const tapFaqControl = (node) => {
+    const rect = node.getBoundingClientRect();
+    const options = {
+      bubbles: true, cancelable: true, pointerId: 1, pointerType: 'mouse', isPrimary: true,
+      clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2,
+    };
+    // Framer's tap detection responds to a pointerdown/pointerup pair,
+    // not to synthetic clicks.
+    node.dispatchEvent(new PointerEvent('pointerdown', options));
+    node.dispatchEvent(new PointerEvent('pointerup', options));
   };
   const applyFaqAccessibility = () => {
     document.querySelectorAll('div[tabindex="0"]').forEach((node) => {
@@ -246,20 +263,12 @@
       node.addEventListener('keydown', (event) => {
         if (event.key !== 'Enter' && event.key !== ' ') return;
         event.preventDefault();
-        const rect = node.getBoundingClientRect();
-        const options = {
-          bubbles: true, cancelable: true, pointerId: 1, pointerType: 'mouse', isPrimary: true,
-          clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2,
-        };
-        // Framer's tap detection responds to a pointerdown/pointerup pair,
-        // not to synthetic clicks.
-        node.dispatchEvent(new PointerEvent('pointerdown', options));
-        node.dispatchEvent(new PointerEvent('pointerup', options));
-        setTimeout(() => syncFaqExpanded(node), 450);
+        tapFaqControl(node);
+        // the answer animates open/closed after the tap; sync once settled
+        setTimeout(() => syncFaqExpanded(node), 500);
       });
       node.addEventListener('pointerup', () => {
-        // the answer animates open/closed after the tap; sync once settled
-        setTimeout(() => syncFaqExpanded(node), 450);
+        setTimeout(() => syncFaqExpanded(node), 500);
       });
     });
   };

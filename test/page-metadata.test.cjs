@@ -81,10 +81,12 @@ test('runtime hydration modules are free of stale personal/template destinations
 // legitimate personal-site wording is never blocked.
 const FABRICATION_RESIDUE = {
   'fake client/company': ['Vireon Labs', 'Northlane Studio', 'Nova Studio', 'Meridian Health', 'Solvian Tech', 'Brightform Co.', 'NexaTech'],
-  'fake team member or testimonial persona': ['Noah Carter', 'Lucas Reed', 'Samantha', 'Founder at', 'A small team, working with focus and care.', 'Our Team'],
+  'fake team member or testimonial persona': ['Noah Carter', 'Lucas Reed', 'Samantha', 'Ethan Walker', 'Olivia Bennett', 'Founder at', 'A small team, working with focus and care.', 'Our Team'],
   'unsupported metric or achievement': ['+200', 'Web Decks Created', 'On-time delivery', 'Returning clients', 'Completed projects', 'Faster launch', 'Trusted by many', 'Trusted by teams'],
   'agency pricing / engagement language': ['monthly engagement', 'billed', 'yearly commitment', 'non-refundable', 'Flexible engagement', 'monthly plan', 'pricing work', 'request revisions'],
   'template legal page text': ['Terms of Service', 'Privacy Policy', 'Scope of Services', 'Payment Terms', 'Last updated at'],
+  'template footer label': ['Made in'],
+  'agency tone placeholder': ['Tell us about your project'],
   'template identity / CTA': ['Pulma', 'Irise Studio', 'Rosyid', 'Book a Call', 'Use for Free', 'Explore Mores'],
 };
 
