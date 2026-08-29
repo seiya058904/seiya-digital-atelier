@@ -15,7 +15,7 @@ python server.py
 It serves `http://127.0.0.1:8787/` and maps `/work`, `/about`, and `/contact` to their entry files. For a port override use `python server.py 8788`. Run the available automated tests with:
 
 ```powershell
-node --test test/work-card-guard.test.cjs test/route-assets.test.cjs
+node --test test/work-card-guard.test.cjs test/route-assets.test.cjs test/route-links.test.cjs test/cms-compat.test.cjs test/page-metadata.test.cjs
 ```
 
 There are no repository-defined install, build, lint, or type-check commands.

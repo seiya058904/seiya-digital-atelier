@@ -57,22 +57,9 @@
       if (target && link.getAttribute('href') !== target) link.setAttribute('href', target);
     });
   };
-  const routeInternalNavigation = (event) => {
-    if (event.type === 'keydown' && event.key !== 'Enter') return;
-    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
-    if (!link || link.dataset.navigationDisabled === 'true') return;
-    const path = normalizePath(link.getAttribute('href'));
-    if (!['/work', '/about', '/contact'].includes(path)) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    window.location.assign(sitePath(`${path}/`));
-  };
-  document.addEventListener('click', routeInternalNavigation, true);
-  document.addEventListener('auxclick', routeInternalNavigation, true);
-  document.addEventListener('keydown', routeInternalNavigation, true);
   const isExternal = (value) => {
-    if (!value || /^(data:|blob:|javascript:|#)/i.test(value)) return false;
-    if (/^(mailto:|tel:|sms:|discord:|intent:)/i.test(value)) return true;
+    if (!value || /^(data:|blob:|javascript:|#|mailto:|tel:|sms:)/i.test(value)) return false;
+    if (/^(discord:|intent:)/i.test(value)) return true;
     try {
       const url = new URL(value, document.baseURI || location.href);
       return /^https?:$/i.test(url.protocol) && url.origin !== location.origin;
@@ -90,159 +77,110 @@
       link.removeAttribute('target');
     });
   };
-  const normalizeProjectAsset = (node) => {
-    if (!projectPrefix) return;
-    if (!(node instanceof Element)) return;
-    for (const attribute of ['src', 'poster']) {
-      const value = node.getAttribute(attribute);
-      if (value?.startsWith('/assets/')) node.setAttribute(attribute, `${projectPrefix}${value}`);
-    }
-    const srcset = node.getAttribute('srcset');
-    if (srcset) {
-      const next = srcset.replace(/(^|[\s,])(\/assets\/)/g, `$1${projectPrefix}$2`);
-      if (next !== srcset) node.setAttribute('srcset', next);
-    }
-    if (node instanceof HTMLLinkElement) {
-      const href = node.getAttribute('href');
-      if (href?.startsWith('/assets/')) node.setAttribute('href', `${projectPrefix}${href}`);
-    }
-  };
-  const normalizeProjectAssets = (root = document) => {
-    normalizeProjectAsset(root);
-    root.querySelectorAll?.('[src], [srcset], [poster], link[href]').forEach(normalizeProjectAsset);
-  };
   const disableProjectCardLinks = () => globalThis.SeiyaWorkCardGuard?.process();
-  const redirectConfiguredLink = (event) => {
-    if (event.type === 'keydown' && event.key !== 'Enter') return;
-    const link = event.target instanceof Element
-      ? event.target.closest('a[data-allow-external="true"]')
-      : null;
-    if (!link) return;
-    const target = {
-      GitHub: 'https://github.com/seiya058904/seiya-digital-atelier',
-      Email: 'mailto:sunmengsaiyi@gmail.com',
-    }[link.textContent.trim()];
-    if (!target) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    window.location.assign(target);
+  // Footer link lists are re-bound at hydration from Framer's embedded CMS
+  // data, so their destinations cannot be fixed in the raw HTML alone. Labels
+  // are already personal in the raw HTML; re-point destinations by exact label.
+  const footerTargets = () => {
+    const targets = new Map([
+      ['GitHub', 'https://github.com/seiya058904/seiya-digital-atelier'],
+      ['Email', 'mailto:sunmengsaiyi@gmail.com'],
+      ['Get in Touch', 'mailto:sunmengsaiyi@gmail.com'],
+      ['View Projects', routes.work],
+      ['Visual Archive', routes.work],
+      ['Explorations', routes.about],
+      ['How I Build', routes.about],
+      ['Questions', routes.contact],
+      // the two legal links are CMS-driven: Framer re-renders their labels and
+      // destinations from the embedded collection after hydration
+      ['Privacy Policy', 'https://github.com/seiya058904/seiya-digital-atelier'],
+      ['Terms of Service', 'mailto:sunmengsaiyi@gmail.com'],
+    ]);
+    const relabel = new Map([
+      ['Privacy Policy', 'GitHub'],
+      ['Terms of Service', 'Email'],
+    ]);
+    document.querySelectorAll('footer a').forEach((link) => {
+      if (link.dataset.navigationDisabled === 'true') return;
+      const label = link.textContent.trim();
+      let target = null;
+      let isConfigured = false;
+      for (const [key, value] of targets) {
+        // hover variants render the label text twice inside one anchor
+        if (label === key || label === key + key || (key === 'View Projects' && label.startsWith(key))) {
+          target = value;
+          isConfigured = key !== 'View Projects';
+          break;
+        }
+      }
+      if (!target && label === 'Seiya') {
+        const href = link.getAttribute('href') || '';
+        target = href.includes('#hero') ? null : routes.about;
+      }
+      if (!target) return;
+      if (link.getAttribute('href') !== target) link.setAttribute('href', target);
+      if (isConfigured) link.dataset.allowExternal = 'true';
+      const nextLabel = relabel.get(label);
+      if (nextLabel) {
+        const rich = link.querySelector('p, [data-framer-component-type="RichTextContainer"]');
+        if (rich) rich.textContent = nextLabel;
+        else link.textContent = nextLabel;
+      }
+    });
   };
-  const block = (event) => {
-    if (event.type === 'keydown' && event.key !== 'Enter') return;
-    const link = event.target instanceof Element
-      ? event.target.closest('a[href], area[href]')
-      : null;
-    if (link?.dataset.allowExternal === 'true') return;
-    if (link && isExternal(link.getAttribute('href'))) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    }
-  };
-  document.addEventListener('click', block, true);
-  document.addEventListener('auxclick', block, true);
-  document.addEventListener('keydown', block, true);
-  document.addEventListener('click', redirectConfiguredLink, true);
-  document.addEventListener('auxclick', redirectConfiguredLink, true);
-  document.addEventListener('keydown', redirectConfiguredLink, true);
-  const returnHome = (event) => {
-    if (event.type === 'keydown' && event.key !== 'Enter') return;
-    const link = event.target instanceof Element
-      ? event.target.closest('a[href]')
-      : null;
-    if (!link) return;
-    if (link.textContent.trim() === 'Home') {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      try { sessionStorage.setItem('seiya-home-transition', '1'); } catch {}
-      window.location.assign(routes.home);
-      return;
-    }
-    const url = new URL(link.getAttribute('href'), document.baseURI || location.href);
-    if (url.hash !== '#hero' || normalizePath(url.pathname) !== '/') return;
+  const goHome = (event) => {
     event.preventDefault();
     event.stopImmediatePropagation();
     try { sessionStorage.setItem('seiya-home-transition', '1'); } catch {}
     window.location.assign(routes.home);
   };
-  const installHomeGuards = () => {
-    document.querySelectorAll('a[href]').forEach((link) => {
-      const label = link.textContent.trim();
-      const isHome = label === 'Home';
-      const logoUrl = new URL(link.getAttribute('href'), document.baseURI);
-      const isLogo = logoUrl.hash === '#hero' && normalizePath(logoUrl.pathname) === '/';
-      if ((!isHome && !isLogo) || link.dataset.homeGuardInstalled === 'true') return;
-      const target = routes.home;
-      const forceNavigation = (event) => {
-        if (event.type === 'keydown' && event.key !== 'Enter') return;
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        try { sessionStorage.setItem('seiya-home-transition', '1'); } catch {}
-        window.location.assign(target);
-      };
-      link.addEventListener('pointerdown', forceNavigation, true);
-      link.addEventListener('click', forceNavigation, true);
-      link.addEventListener('keydown', forceNavigation, true);
-      link.dataset.homeGuardInstalled = 'true';
-    });
+  const isHomeLink = (link) => link.textContent.trim() === 'Home' || routeTarget(link.getAttribute('href')) === routes.home;
+
+  // Single capture-phase dispatcher for every light-DOM navigation concern:
+  // home/logo navigation, internal route normalization, and external blocking.
+  const handleActivation = (event) => {
+    if (event.type === 'keydown' && event.key !== 'Enter') return;
+    const link = event.target instanceof Element ? event.target.closest('a[href], area[href]') : null;
+    if (!link || link.dataset.navigationDisabled === 'true') return;
+    if (link.dataset.allowExternal === 'true') return;
+    const href = link.getAttribute('href');
+    if (event.type !== 'auxclick' && isHomeLink(link)) {
+      goHome(event);
+      return;
+    }
+    const path = normalizePath(href);
+    if (['/work', '/about', '/contact'].includes(path)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.location.assign(sitePath(`${path}/`));
+      return;
+    }
+    if (isExternal(href)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
   };
-  const leafNodes = (root) => [...root.querySelectorAll('*')]
-    .filter((node) => node.children.length === 0 && node.textContent.trim());
-  const replaceFooterText = (root, replacements) => {
-    const map = new Map(replacements);
-    leafNodes(root).forEach((node) => {
-      const next = map.get(node.textContent.trim());
-      if (next !== undefined) node.textContent = next;
-    });
+  const handlePointerDown = (event) => {
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (!link || link.dataset.navigationDisabled === 'true' || link.dataset.allowExternal === 'true') return;
+    if (isHomeLink(link)) goHome(event);
   };
-  const normalizeFooter = () => {
-    const footer = document.querySelector('footer');
-    if (!footer) return;
-    const text = footer.textContent || '';
-    const hasOldLayout = /Pulma|About Us|X \(Twitter\)|Linkedin|Instagram|Threads|Legal|Email Us/.test(text);
-    const hasPrivacyLabels = /Privacy Policy|Terms of Service/.test(text);
-    const hasTargetLabels = /GitHub|Email/.test(text);
-    if (!hasOldLayout && !hasPrivacyLabels && !hasTargetLabels) return;
-    const replacements = [
-      ['Privacy Policy', 'GitHub'],
-      ['Terms of Service', 'Email'],
-    ];
-    if (hasOldLayout) replacements.unshift(
-      ['Pulma', 'Seiya'],
-      ['clarity.', 'curiosity.'],
-      ['Share your goals, and we’ll help shape the direction and guide your project forward with clarity and care.', 'Projects, ideas, experiments, and everything still in progress. This space will keep changing as I build and learn.'],
-      ['Book a Call', 'View Projects'],
-      ['Email Us', 'Get in Touch'],
-      ['Work', 'Projects'],
-      ['About Us', 'About Me'],
-      ['Connect', 'Explore'],
-      ['X (Twitter)', 'Visual Archive'],
-      ['Linkedin', 'Explorations'],
-      ['Instagram', 'How I Build'],
-      ['Threads', 'Questions'],
-      ['Legal', 'Connect'],
-      ['©Irise Studio 2026. All rights reserved.', '© Seiya 2026. All rights reserved.'],
-      ['Made in', 'Built with care'],
-      ['Framer', 'Seiya'],
-      ['Rosyid Qoim', 'Seiya'],
-      ['Rosvid Qoim', 'Seiya'],
-    );
-    replaceFooterText(footer, replacements);
-    const footerLinks = [...footer.querySelectorAll('a')];
-    const paths = new Map([
-      ['Home', routes.home],
-      ['Projects', routes.work],
-      ['About Me', routes.about],
-      ['Contact', routes.contact],
-      ['GitHub', 'https://github.com/seiya058904/seiya-digital-atelier'],
-      ['Email', 'mailto:sunmengsaiyi@gmail.com'],
-    ]);
-    footerLinks.forEach((link) => {
-      const path = paths.get(link.textContent.trim());
-      if (!path) return;
-      if (link.getAttribute('href') !== path) link.setAttribute('href', path);
-      if (/^(GitHub|Email)$/.test(link.textContent.trim())) link.dataset.allowExternal = 'true';
-    });
+  document.addEventListener('pointerdown', handlePointerDown, true);
+  document.addEventListener('click', handleActivation, true);
+  document.addEventListener('auxclick', handleActivation, true);
+  document.addEventListener('keydown', handleActivation, true);
+  const openContactDraft = (event) => {
+    if (currentRoute() !== '/contact' || !(event.target instanceof HTMLFormElement)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const data = new FormData(event.target);
+    const body = ['Name', 'Email', 'Phone Number', 'Message']
+      .map((field) => `${field}: ${data.get(field) || ''}`)
+      .join('\n');
+    const subject = encodeURIComponent('Website inquiry');
+    window.location.href = `mailto:sunmengsaiyi@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
   };
+  document.addEventListener('submit', openContactDraft, true);
   const applyAboutChanges = () => {
     if (currentRoute() !== '/about') return;
     if (document.getElementById('route-about-customizations')) return;
@@ -269,46 +207,69 @@
       filters.style.display = 'none';
     }
   };
-  const openContactDraft = (event) => {
-    if (currentRoute() !== '/contact' || !(event.target instanceof HTMLFormElement)) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    const data = new FormData(event.target);
-    const body = ['Name', 'Email', 'Phone Number', 'Message']
-      .map((field) => `${field}: ${data.get(field) || ''}`)
-      .join('\n');
-    const subject = encodeURIComponent('Website inquiry');
-    window.location.href = `mailto:sunmengsaiyi@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+  // Hydration re-renders the page-level CTAs from Framer module data and can
+  // reset their destinations; bind the two known CTA labels explicitly.
+  const MAILTO = 'mailto:sunmengsaiyi@gmail.com';
+  const bindCtas = () => {
+    document.querySelectorAll('a').forEach((link) => {
+      if (link.dataset.navigationDisabled === 'true' || link.closest('footer')) return;
+      const label = link.textContent.trim();
+      if (label.startsWith('View Projects')) {
+        if (link.getAttribute('href') !== routes.work) link.setAttribute('href', routes.work);
+        link.removeAttribute('data-external-url');
+        return;
+      }
+      if (label.startsWith('Get in Touch') || label === 'Email Us' || label === 'Email UsEmail Us') {
+        if (link.getAttribute('href') !== MAILTO) link.setAttribute('href', MAILTO);
+        link.dataset.allowExternal = 'true';
+        link.removeAttribute('data-external-url');
+      }
+    });
   };
-  document.addEventListener('pointerdown', returnHome, true);
-  document.addEventListener('pointerup', returnHome, true);
-  document.addEventListener('click', returnHome, true);
-  document.addEventListener('keydown', returnHome, true);
-  document.addEventListener('submit', openContactDraft, true);
   const updateRoute = () => {
-    normalizeFooter();
     normalizeSiteLinks();
+    footerTargets();
+    bindCtas();
     applyAboutChanges();
     applyWorkChanges();
     disable();
     disableProjectCardLinks();
-    installHomeGuards();
+  };
+  const normalizeProjectAsset = (node) => {
+    if (!projectPrefix) return;
+    if (!(node instanceof Element)) return;
+    for (const attribute of ['src', 'poster']) {
+      const value = node.getAttribute(attribute);
+      if (value?.startsWith('/assets/')) node.setAttribute(attribute, `${projectPrefix}${value}`);
+    }
+    const srcset = node.getAttribute('srcset');
+    if (srcset) {
+      const next = srcset.replace(/(^|[\s,])(\/assets\/)/g, `$1${projectPrefix}$2`);
+      if (next !== srcset) node.setAttribute('srcset', next);
+    }
+    if (node instanceof HTMLLinkElement) {
+      const href = node.getAttribute('href');
+      if (href?.startsWith('/assets/')) node.setAttribute('href', `${projectPrefix}${href}`);
+    }
+  };
+  const normalizeProjectAssets = (root = document) => {
+    normalizeProjectAsset(root);
+    root.querySelectorAll?.('[src], [srcset], [poster], link[href]').forEach(normalizeProjectAsset);
   };
   updateRoute();
   normalizeProjectAssets();
-  new MutationObserver(updateRoute).observe(document.documentElement, {
+  new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === 'attributes') normalizeProjectAsset(mutation.target);
+      else mutation.addedNodes.forEach(normalizeProjectAssets);
+    }
+    updateRoute();
+  }).observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ['href', 'target', 'rel'],
+    attributeFilter: ['href', 'target', 'rel', 'src', 'srcset', 'poster'],
     childList: true,
     subtree: true,
   });
-  new MutationObserver((mutations) => mutations.forEach((mutation) => {
-    if (mutation.type === 'attributes') normalizeProjectAsset(mutation.target);
-    mutation.addedNodes.forEach(normalizeProjectAssets);
-  })).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['src', 'srcset', 'poster', 'href'],
-    childList: true,
-    subtree: true,
-  });
+  globalThis.SeiyaRouteLinks = Object.freeze({ sitePath, routeTarget, normalizePath, isExternal, disable, routes });
+  if (typeof module !== 'undefined') module.exports = { routeTarget, normalizePath, sitePath };
 })();

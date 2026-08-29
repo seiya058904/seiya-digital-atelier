@@ -37,6 +37,8 @@
     link.removeAttribute('target');
     link.removeAttribute('rel');
     link.dataset.navigationDisabled = 'true';
+    link.setAttribute('aria-disabled', 'true');
+    link.style.cursor = 'default';
   };
   const process = (root = document) => {
     if (root instanceof HTMLAnchorElement) disable(root);

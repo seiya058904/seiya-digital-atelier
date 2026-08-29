@@ -12,31 +12,12 @@
     return `${projectPrefix}${path.startsWith('/') ? path : `/${path}`}`;
   };
 
-  const isExternalNavigation = (value) => {
-    if (!value || /^(data:|blob:|javascript:|#)/i.test(value)) return false;
-    if (/^(mailto:|tel:|sms:|discord:|intent:)/i.test(value)) return true;
-    try {
-      const url = new URL(value, document.baseURI || location.href);
-      return /^https?:$/i.test(url.protocol) && url.origin !== location.origin;
-    } catch {
-      return false;
-    }
-  };
-  const disableExternalLinks = (root = document) => {
-    if (!root?.querySelectorAll) return;
-    root.querySelectorAll('a[href], area[href]').forEach((link) => {
-      if (link.dataset.allowExternal === 'true') return;
-      const href = link.getAttribute('href');
-      if (!isExternalNavigation(href)) return;
-      link.dataset.externalUrl = href;
-      link.removeAttribute('href');
-      link.removeAttribute('target');
-    });
-    root.querySelectorAll('*').forEach((node) => {
-      if (node.shadowRoot) disableExternalLinks(node.shadowRoot);
-    });
-  };
-  const restoreSelectedWorkLinks = (root = document) => {
+  const routeLinks = globalThis.SeiyaRouteLinks || null;
+  // One-time normalization for a freshly mounted shadow tree. Light-DOM state
+  // (routes, footer, external blocking, card guards) is owned by route-links.js
+  // and work-card-guard.js; shadow content needs its own pass because
+  // document-level observers and selectors cannot reach inside a shadow root.
+  const restoreSelectedWorkLinks = (root) => {
     if (!root?.querySelectorAll) return;
     const allowed = new Set([
       'https://github.com/seiya058904/Hardware-Monitoring',
@@ -49,78 +30,40 @@
       if (link.getAttribute('href') !== url) link.setAttribute('href', url);
       link.dataset.allowExternal = 'true';
     });
-    root.querySelectorAll('*').forEach((node) => {
-      if (node.shadowRoot) restoreSelectedWorkLinks(node.shadowRoot);
-    });
-  };
-  const blockExternalNavigation = (event) => {
-    if (event.type === 'keydown' && event.key !== 'Enter') return;
-    const target = event.target instanceof Element
-      ? event.target.closest('a[href], area[href]')
-      : null;
-    if (target?.dataset.allowExternal === 'true') return;
-    if (!target || !isExternalNavigation(target.getAttribute('href'))) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
   };
   const disableProjectCardLinks = (root = document) => globalThis.SeiyaWorkCardGuard?.process(root);
-  const applyFooterTargets = () => {
-    document.querySelectorAll('footer a').forEach((link) => {
-      const label = link.textContent.trim();
-      if (label === 'GitHub') {
-        link.href = 'https://github.com/seiya058904/seiya-digital-atelier';
-        link.dataset.allowExternal = 'true';
+  const normalizeMount = (root) => {
+    if (!root?.querySelectorAll) return;
+    restoreSelectedWorkLinks(root);
+    root.querySelectorAll('a[href], area[href]').forEach((link) => {
+      if (link.dataset.allowExternal === 'true' || link.dataset.navigationDisabled === 'true') return;
+      const href = link.getAttribute('href');
+      const target = routeLinks?.routeTarget?.(href);
+      if (target) {
+        if (href !== target) link.setAttribute('href', target);
+        return;
       }
-      if (label === 'Email') {
-        link.href = 'mailto:sunmengsaiyi@gmail.com';
-        link.dataset.allowExternal = 'true';
+      if (routeLinks?.isExternal?.(href)) {
+        link.dataset.externalUrl = href;
+        link.removeAttribute('href');
+        link.removeAttribute('target');
       }
     });
+    if (routeLinks && projectPrefix) {
+      root.querySelectorAll('[src], [srcset], [poster], link[href]').forEach((node) => {
+        for (const attribute of ['src', 'poster', 'href']) {
+          const value = node.getAttribute?.(attribute);
+          if (value?.startsWith('/assets/')) node.setAttribute(attribute, `${projectPrefix}${value}`);
+        }
+        const srcset = node.getAttribute('srcset');
+        if (srcset) {
+          const next = srcset.replace(/(^|[\s,])(\/assets\/)/g, `$1${projectPrefix}$2`);
+          if (next !== srcset) node.setAttribute('srcset', next);
+        }
+      });
+    }
+    disableProjectCardLinks(root);
   };
-  const redirectConfiguredLink = (event) => {
-    if (event.type === 'keydown' && event.key !== 'Enter') return;
-    const link = event.target instanceof Element
-      ? event.target.closest('a[data-allow-external="true"]')
-      : null;
-    if (!link) return;
-    const target = {
-      GitHub: 'https://github.com/seiya058904/seiya-digital-atelier',
-      Email: 'mailto:sunmengsaiyi@gmail.com',
-    }[link.textContent.trim()];
-    if (!target) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    window.location.assign(target);
-  };
-  document.addEventListener('click', blockExternalNavigation, true);
-  document.addEventListener('auxclick', blockExternalNavigation, true);
-  document.addEventListener('keydown', blockExternalNavigation, true);
-  document.addEventListener('click', redirectConfiguredLink, true);
-  document.addEventListener('auxclick', redirectConfiguredLink, true);
-  document.addEventListener('keydown', redirectConfiguredLink, true);
-  disableExternalLinks();
-  restoreSelectedWorkLinks();
-  disableProjectCardLinks();
-  applyFooterTargets();
-  new MutationObserver(() => {
-    restoreSelectedWorkLinks();
-    disableExternalLinks();
-  }).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['href', 'target'],
-    childList: true,
-    subtree: true,
-  });
-  new MutationObserver(() => disableProjectCardLinks()).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['href', 'target'],
-    childList: true,
-    subtree: true,
-  });
-  new MutationObserver(() => applyFooterTargets()).observe(document.documentElement, {
-    childList: true,
-    subtree: true,
-  });
 
   const originalFetch = window.fetch.bind(window);
   const finishHomeTransition = () => {
@@ -177,57 +120,6 @@
   const reviseG5ImageUrl = (value) => value.includes('G5V2BfFS1k2hTxiBqkphqzLkVNc') && !value.includes('asset-rev=')
     ? `${value}${value.includes('?') ? '&' : '?'}asset-rev=20260821-2`
     : value;
-  const normalizeRepositoryPaths = (root = document) => {
-    root.querySelectorAll?.('[src], [srcset], [poster]').forEach((element) => {
-      for (const attribute of ['src', 'poster']) {
-        const value = element.getAttribute(attribute);
-        if (!value) continue;
-        const next = projectPrefix
-          ? (value.startsWith('/assets/') ? `${projectPrefix}${value}` : value)
-          : value.startsWith(`${repositoryPrefix}/`) ? value.slice(repositoryPrefix.length) : value;
-        if (next !== value) element.setAttribute(attribute, next);
-      }
-      const value = element.getAttribute('srcset');
-      if (!value) return;
-      const next = value.split(',').map((item) => {
-        const [url, ...descriptor] = item.trim().split(/\s+/);
-        const normalized = projectPrefix
-          ? (url.startsWith('/assets/') ? `${projectPrefix}${url}` : url)
-          : url.startsWith(`${repositoryPrefix}/`) ? url.slice(repositoryPrefix.length) : url;
-        return [normalized, ...descriptor].join(' ');
-      }).join(',');
-      if (next !== value) element.setAttribute('srcset', next);
-    });
-  };
-  const normalizeSiteLinks = (root = document) => {
-    root.querySelectorAll?.('a[href], area[href]').forEach((link) => {
-      const href = link.getAttribute('href');
-      if (!href || /^(https?:|mailto:|tel:|sms:|#|javascript:|data:|blob:)/i.test(href)) return;
-      let path;
-      try { path = new URL(href, document.baseURI || location.href).pathname; } catch { return; }
-      const normalized = path.replace(projectPrefix, '').replace(/\/+$/, '') || '/';
-      if (!['/', '/work', '/about', '/contact'].includes(normalized)) return;
-      const suffix = href.includes('#') ? href.slice(href.indexOf('#')) : '';
-      const target = normalized === '/' ? `/${suffix}` : `${normalized}/${suffix}`.replace(/\/\/$/, '/');
-      const next = sitePath(target);
-      if (href !== next) link.setAttribute('href', next);
-    });
-  };
-  const routeInternalNavigation = (event) => {
-    if (event.type === 'keydown' && event.key !== 'Enter') return;
-    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
-    if (!link || link.dataset.navigationDisabled === 'true') return;
-    let path;
-    try { path = new URL(link.getAttribute('href'), document.baseURI || location.href).pathname; } catch { return; }
-    const normalized = path.replace(projectPrefix, '').replace(/\/+$/, '') || '/';
-    if (!['/work', '/about', '/contact'].includes(normalized)) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    window.location.assign(sitePath(`${normalized}/`));
-  };
-  document.addEventListener('click', routeInternalNavigation, true);
-  document.addEventListener('auxclick', routeInternalNavigation, true);
-  document.addEventListener('keydown', routeInternalNavigation, true);
   const rewriteCss = (css, basePath) => css.replace(/url\(\s*(["']?)([^"')]+)\1\s*\)/gi, (match, quote, value) => {
     if (specialUrl(value)) return match;
     return `url("${resolveUrl(value, basePath)}")`;
@@ -965,45 +857,6 @@
     });
   };
   const applyCSourceCopy = (source) => replaceDetachedText(source.document, detachedCopy);
-  document.addEventListener('submit', (event) => {
-    if (location.pathname.replace(/\/+$/, '') !== '/contact' || !(event.target instanceof HTMLFormElement)) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    const data = new FormData(event.target);
-    const body = ['Name', 'Email', 'Phone Number', 'Message']
-      .map((field) => `${field}: ${data.get(field) || ''}`)
-      .join('\n');
-    window.location.href = `mailto:sunmengsaiyi@gmail.com?subject=${encodeURIComponent('Website inquiry')}&body=${encodeURIComponent(body)}`;
-  }, true);
-  const applyClientRouteChanges = () => {
-    const path = location.pathname.replace(/\/+$/, '') || '/';
-    if (path === '/about' && !document.getElementById('route-about-customizations')) {
-      const style = document.createElement('style');
-      style.id = 'route-about-customizations';
-      style.textContent = `
-        [data-framer-name="Team"] { display: none !important; }
-        @media (min-width: 810px) {
-          [data-framer-name="Image Container"]:has(img[src*="aLIllYwlY5spWoij2YX9pjFYfqk_8318d33ca2.webp"]) {
-            width: 80% !important;
-            margin-inline: auto !important;
-          }
-        }
-      `;
-      document.head.append(style);
-    }
-    if (path !== '/work') return;
-    const header = [...document.querySelectorAll('[data-framer-name]')]
-      .find((node) => node.getAttribute('data-framer-name') === 'Header');
-    const filters = header?.querySelector('.framer-pxadms');
-    if (!filters || filters.dataset.routeFilterHidden) return;
-    if (['All', 'Framer Dev', 'Product Design', 'Branding Design', 'Web Dev']
-      .every((label) => filters.textContent.includes(label))) {
-      filters.dataset.routeFilterHidden = 'true';
-      filters.style.display = 'none';
-    }
-  };
-  applyClientRouteChanges();
-  new MutationObserver(applyClientRouteChanges).observe(document.documentElement, { childList: true, subtree: true });
   const integrationsCopy = [
     ['Connect the tools that hold your context', 'The tools that connect the way I build.'],
     ['Connect the tools that', 'The tools that connect'],
@@ -1035,6 +888,7 @@
     mount.root.append(sectionMount);
     if (labelText) observeSectionLabel(sectionMount);
     rewriteMedia(mount.root, source.basePath);
+    normalizeMount(mount.root);
     bindSourceClassReveal(mount.root);
     insertBefore(mount.host, anchor);
   };
@@ -1062,6 +916,7 @@
     hydrateMirrorBIcons(mount.root);
     bindAppearMotion(mount.root, source);
     await bindMirrorBHover(mount.root);
+    normalizeMount(mount.root);
     insertBefore(mount.host, anchor);
   };
   const iconPaths = {
@@ -1129,6 +984,7 @@
     rewriteMedia(mount.root, source.basePath);
     const css = localizeIntegrations(mount.root.querySelector('section'));
     appendStyle(mount.root, `${cMotionCss}\n${css}`);
+    normalizeMount(mount.root);
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const reveals = [...mount.root.querySelectorAll('.reveal')];
     if (!reduced) {
@@ -1167,25 +1023,10 @@
     await appendCBlock('c-selected-work', cSource.document.querySelector('#work'), cSource, howItWorks, cCss, 'Selected Work');
     await appendMirrorB(mirrorB, howItWorks);
     await appendIntegrations(personal, howItWorks);
-    normalizeRepositoryPaths();
-    normalizeSiteLinks();
-    new MutationObserver(() => normalizeRepositoryPaths()).observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['src', 'srcset', 'poster'],
-      childList: true,
-      subtree: true,
-    });
-    new MutationObserver(() => normalizeSiteLinks()).observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['href'],
-      childList: true,
-      subtree: true,
-    });
     placeStableBlocks();
     const stableRoot = document.querySelector('#main');
     if (stableRoot) new MutationObserver(placeStableBlocks).observe(stableRoot, { childList: true, subtree: true });
     document.querySelectorAll('#__framer-editorbar, iframe.status_hidden').forEach((node) => node.remove());
-    applyFooterTargets();
     document.documentElement.dataset.cArchitecture = 'mirror-a-work-single-document-source-state';
     document.body.dataset.cAddedBlocks = 'c-ticker,c-selected-work,mirror-b-works-social-proof-services,personal-integrations';
     finishHomeTransition();
