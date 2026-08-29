@@ -567,9 +567,8 @@
     }
     return element.offsetLeft;
   };
-  const bindMirrorBHover = async (root) => {
-    let motion = null;
-    try { motion = await import(sourceMotionUrl); motion.v?.(); motion.t?.(); } catch (error) { console.warn('[C source integration] Mirror B motion module unavailable', error); }
+  const bindMirrorBHover = (root, motion = null) => {
+    if (!motion) return;
     const bind = (card, specs) => {
       let active = false;
       let runs = [];
@@ -892,11 +891,11 @@
     bindSourceClassReveal(mount.root);
     insertBefore(mount.host, anchor);
   };
-  const appendMirrorB = async (source, anchor) => {
+  const appendMirrorB = async (source, anchor, { css, motion } = {}) => {
     const mount = sourceRoot('mirror-b-sections');
     mount.host.classList.add('c-source-runtime-host');
     mount.host.dataset.cSourceSections = 'works,social-proof,services';
-    appendStyle(mount.root, scopedShadowCss(await sourceStyles(source)));
+    appendStyle(mount.root, css ?? scopedShadowCss(await sourceStyles(source)));
     appendStyle(mount.root, cMotionCss);
     const svgTemplates = source.document.querySelector('#svg-templates');
     if (svgTemplates) mount.root.append(document.adoptNode(svgTemplates));
@@ -915,9 +914,11 @@
     rewriteMedia(mount.root, source.basePath);
     hydrateMirrorBIcons(mount.root);
     bindAppearMotion(mount.root, source);
-    await bindMirrorBHover(mount.root);
     normalizeMount(mount.root);
     insertBefore(mount.host, anchor);
+    // Hover motion binds to the already-inserted nodes; importing the module
+    // up front means this no longer delays the section from appearing.
+    bindMirrorBHover(mount.root, motion);
   };
   const iconPaths = {
     'solar:figma-file-linear': '<path d="M8 2h4a3 3 0 0 1 0 6H8v4a3 3 0 1 1-3 3 3 3 0 0 1 3-3V8a3 3 0 1 1 0-6Zm0 0v6h4a3 3 0 1 0 0-6H8Zm0 6h4a3 3 0 1 1 0 6H8V8Z"/>',
@@ -999,16 +1000,28 @@
   };
 
   try {
+    // Source documents, stylesheets, and the motion module do not depend on
+    // Framer hydration: start them immediately so they download while the
+    // hydration wait runs, instead of strictly after it. Only DOM insertion
+    // (appendCBlock/appendMirrorB/appendIntegrations) must stay after the
+    // hydration wait, because hydration replaces the rendered DOM.
+    const sourcesPromise = Promise.all([
+      fetchSource('./source/c.html'),
+      fetchSource('./source/b.html'),
+      fetchSource('./source/integrations.html'),
+    ]);
+    const motionPromise = import(sourceMotionUrl)
+      .then((motion) => { motion.v?.(); motion.t?.(); return motion; })
+      .catch((error) => { console.warn('[C source integration] Mirror B motion module unavailable', error); return null; });
+    const cStylesPromise = sourcesPromise.then(([cSource]) => sourceStyles(cSource));
+    const mirrorBStylesPromise = sourcesPromise.then(([, mirrorB]) => sourceStyles(mirrorB));
+
     await waitForMirrorARuntime();
     removeCBlocks();
     const removeEditorbar = () => document.querySelectorAll('#__framer-editorbar, iframe.status_hidden').forEach((node) => node.remove());
     removeEditorbar();
     [250, 500, 1000, 2000, 4000].forEach((delay) => setTimeout(removeEditorbar, delay));
-    const [cSource, mirrorB, personal] = await Promise.all([
-      fetchSource('./source/c.html'),
-      fetchSource('./source/b.html'),
-      fetchSource('./source/integrations.html'),
-    ]);
+    const [cSource, mirrorB, personal] = await sourcesPromise;
     applyCSourceCopy(cSource);
     applyMirrorBSourceCopy(mirrorB);
     applyIntegrationsSourceCopy(personal);
@@ -1018,10 +1031,10 @@
     const processDescriptionStyle = document.createElement('style');
     processDescriptionStyle.textContent = '#how-we-work .framer-1kwm7vy { max-width: 400px; }';
     document.head.append(processDescriptionStyle);
-    const cCss = scopedShadowCss(await sourceStyles(cSource));
+    const cCss = scopedShadowCss(await cStylesPromise);
     await appendCBlock('c-ticker', cSource.document.querySelector('.ticker'), cSource, main, cCss);
     await appendCBlock('c-selected-work', cSource.document.querySelector('#work'), cSource, howItWorks, cCss, 'Selected Work');
-    await appendMirrorB(mirrorB, howItWorks);
+    await appendMirrorB(mirrorB, howItWorks, { css: scopedShadowCss(await mirrorBStylesPromise), motion: await motionPromise });
     await appendIntegrations(personal, howItWorks);
     placeStableBlocks();
     const stableRoot = document.querySelector('#main');

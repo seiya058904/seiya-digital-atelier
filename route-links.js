@@ -226,12 +226,56 @@
       }
     });
   };
+  // Framer renders its FAQ accordions as focusable plain divs with no button
+  // semantics and no keyboard activation (its tap handler listens for pointer
+  // events). Enhance only those: a focusable div carrying both a question and
+  // an answer — this excludes the hidden Work filter chips, which are short.
+  const isFaqControl = (node) => {
+    if (node.tagName !== 'DIV' || node.getAttribute('tabindex') !== '0') return false;
+    return node.getBoundingClientRect().height >= 40 && node.textContent.trim().length > 40;
+  };
+  const syncFaqExpanded = (node) => {
+    node.setAttribute('aria-expanded', node.getBoundingClientRect().height > 70 ? 'true' : 'false');
+  };
+  const applyFaqAccessibility = () => {
+    document.querySelectorAll('div[tabindex="0"]').forEach((node) => {
+      if (node.dataset.seiyaFaqControl === 'true' || !isFaqControl(node)) return;
+      node.dataset.seiyaFaqControl = 'true';
+      node.setAttribute('role', 'button');
+      syncFaqExpanded(node);
+      node.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        const rect = node.getBoundingClientRect();
+        const options = {
+          bubbles: true, cancelable: true, pointerId: 1, pointerType: 'mouse', isPrimary: true,
+          clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2,
+        };
+        // Framer's tap detection responds to a pointerdown/pointerup pair,
+        // not to synthetic clicks.
+        node.dispatchEvent(new PointerEvent('pointerdown', options));
+        node.dispatchEvent(new PointerEvent('pointerup', options));
+        setTimeout(() => syncFaqExpanded(node), 450);
+      });
+      node.addEventListener('pointerup', () => {
+        // the answer animates open/closed after the tap; sync once settled
+        setTimeout(() => syncFaqExpanded(node), 450);
+      });
+    });
+  };
+  // The Framer runtime re-creates its "Made in Framer" badge after hydration;
+  // the raw HTML removal cannot reach the injected copy.
+  const removeFramerBadge = () => {
+    document.getElementById('__framer-badge-container')?.remove();
+  };
   const updateRoute = () => {
     normalizeSiteLinks();
     footerTargets();
     bindCtas();
     applyAboutChanges();
     applyWorkChanges();
+    applyFaqAccessibility();
+    removeFramerBadge();
     disable();
     disableProjectCardLinks();
   };

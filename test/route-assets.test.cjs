@@ -22,6 +22,7 @@ test('prefixes every srcset candidate and hydrated stylesheet asset', () => {
     documentElement: new Element(),
     addEventListener() {},
     querySelector() { return null; },
+    getElementById() { return null; },
     querySelectorAll(selector) {
       return selector === '[src], [srcset], [poster], link[href]' ? [image, stylesheet] : [];
     },

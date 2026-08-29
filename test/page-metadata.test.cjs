@@ -75,3 +75,73 @@ test('runtime hydration modules are free of stale personal/template destinations
     }
   }
 });
+
+// Semantic residue classes: fabricated people/clients, fake metrics, agency
+// pricing/engagement language, and template legal pages. Kept specific so
+// legitimate personal-site wording is never blocked.
+const FABRICATION_RESIDUE = {
+  'fake client/company': ['Vireon Labs', 'Northlane Studio', 'Nova Studio', 'Meridian Health', 'Solvian Tech', 'Brightform Co.', 'NexaTech'],
+  'fake team member or testimonial persona': ['Noah Carter', 'Lucas Reed', 'Samantha', 'Founder at', 'A small team, working with focus and care.', 'Our Team'],
+  'unsupported metric or achievement': ['+200', 'Web Decks Created', 'On-time delivery', 'Returning clients', 'Completed projects', 'Faster launch', 'Trusted by many', 'Trusted by teams'],
+  'agency pricing / engagement language': ['monthly engagement', 'billed', 'yearly commitment', 'non-refundable', 'Flexible engagement', 'monthly plan', 'pricing work', 'request revisions'],
+  'template legal page text': ['Terms of Service', 'Privacy Policy', 'Scope of Services', 'Payment Terms', 'Last updated at'],
+  'template identity / CTA': ['Pulma', 'Irise Studio', 'Rosyid', 'Book a Call', 'Use for Free', 'Explore Mores'],
+};
+
+test('search index only indexes real routes with truthful content', () => {
+  const path = 'assets/main/framerusercontent.com/sites/hIdrDQgPXvkQavctGDYT2/searchIndex-p6aWceYkpyqP.json';
+  const index = JSON.parse(fs.readFileSync(path, 'utf8'));
+  // only routes that actually exist and are publicly reachable may be indexed
+  const allowedRoutes = ['/', '/work', '/about', '/contact'];
+  for (const route of Object.keys(index)) {
+    assert.ok(allowedRoutes.includes(route), `search index indexes non-existent route ${route}`);
+  }
+  for (const [route, entry] of Object.entries(index)) {
+    const fields = ['title', 'description', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'];
+    const content = fields.map((f) => Array.isArray(entry[f]) ? entry[f].join(' ') : entry[f] ?? '').join(' ');
+    for (const [category, phrases] of Object.entries(FABRICATION_RESIDUE)) {
+      for (const phrase of phrases) {
+        assert.ok(!content.includes(phrase), `search index ${route} contains ${category}: ${phrase}`);
+      }
+    }
+  }
+});
+
+test('raw page text of every entry is free of fabricated content classes', () => {
+  for (const file of Object.keys(PAGES)) {
+    const html = fs.readFileSync(file, 'utf8')
+      .replace(/<script\b[\s\S]*?<\/script>/g, ' ')
+      .replace(/<style\b[\s\S]*?<\/style>/g, ' ');
+    const visibleText = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+    for (const [category, phrases] of Object.entries(FABRICATION_RESIDUE)) {
+      for (const phrase of phrases) {
+        assert.ok(!visibleText.includes(phrase), `${file} visible text contains ${category}: ${phrase}`);
+      }
+    }
+  }
+});
+
+test('asset references in page HTML and per-page modules are prefix-safe', () => {
+  // srcset candidates and hydration data must use page-relative paths so the
+  // browser never requests unprefixed /assets/... on GitHub Pages.
+  for (const file of Object.keys(PAGES)) {
+    const html = fs.readFileSync(file, 'utf8');
+    const srcsets = [...html.matchAll(/(?:src|srcset|imagesrcset)="([^"]*)"/g)].map((m) => m[1]);
+    for (const value of srcsets) {
+      assert.ok(!/(?:^|[\s,])\/assets\//.test(value), `${file} srcset contains an absolute /assets/ candidate`);
+    }
+    const handover = html.match(/<script type="framer\/handover"[^>]*>([\s\S]*?)<\/script>/);
+    if (handover) {
+      assert.ok(!handover[1].includes('"/assets/main/'), `${file} handover data contains absolute /assets/main/ paths`);
+    }
+  }
+  const base = 'assets/main/framerusercontent.com/sites/hIdrDQgPXvkQavctGDYT2/';
+  const perPageModules = [
+    '5Be2aL3z8dyEFRv_th7XZxGK8Sv-RbSd9MIId_8rhb4.B6FlxEEx.mjs',
+    'HGyMz7l0pfDnDfC07YOKKEEK_NLUtFk3mJsFRT_9JmQ.CMKP9VEe.mjs',
+  ];
+  for (const module of perPageModules) {
+    const src = fs.readFileSync(base + module, 'utf8');
+    assert.ok(!src.includes("url('/assets/main/"), `${module} contains an absolute CSS mask url`);
+  }
+});
