@@ -1,18 +1,14 @@
-<div align="center">
-
 # Seiya Digital Atelier
 
 **A personal studio on the web — work, ideas and experiments in one place.**
 
 An editorial space for selected projects, creative exploration and a deliberately minimal personal web presence.
 
-[**Visit the atelier ↗**](https://seiya058904.github.io/seiya-digital-atelier/) · [Work](https://seiya058904.github.io/seiya-digital-atelier/work) · [About](https://seiya058904.github.io/seiya-digital-atelier/about) · [Contact](https://seiya058904.github.io/seiya-digital-atelier/contact)
+**[Visit the atelier ↗](https://seiya058904.github.io/seiya-digital-atelier/)** · [Selected work](https://seiya058904.github.io/seiya-digital-atelier/work) · [About](https://seiya058904.github.io/seiya-digital-atelier/about) · [Contact](https://seiya058904.github.io/seiya-digital-atelier/contact)
 
-![Site](https://img.shields.io/badge/site-static%20export-64748b?style=flat-square) ![Hosting](https://img.shields.io/badge/host-GitHub%20Pages-222?style=flat-square)
+## Four places to explore
 
-</div>
-
-## ✦ Explore the space
+The site behaves like a small editorial studio rather than a web application dashboard: a home, a work index and two supporting pages.
 
 | Page | Purpose |
 | --- | --- |
@@ -23,7 +19,7 @@ An editorial space for selected projects, creative exploration and a deliberatel
 
 This repository is a **self-contained static export**. Its route entries are committed as HTML files, with specific compatibility scripts to preserve the generated site's navigation. It is **not** a React source project or a Vite app requiring a bundler.
 
-## 🚀 Run locally
+## Preview locally
 
 Python is sufficient for the repository's route-aware local server:
 
@@ -40,7 +36,7 @@ python server.py 8788
 
 There is no `npm run dev`, package installation or build step. The server maps the committed static route files to clean URLs.
 
-## 🧩 Repository anatomy
+## How this export works
 
 ```text
 index.html          Home
@@ -58,7 +54,7 @@ test/               Node regression checks
 
 The exported assets and recovery material are part of the project history. Avoid casually regenerating the export or replacing it with a different framework; preservation and targeted corrections are deliberate design constraints.
 
-## ✅ Verify before publishing
+## Validation and publishing
 
 ```powershell
 node --test test/work-card-guard.test.cjs test/route-links.test.cjs test/cms-compat.test.cjs test/page-metadata.test.cjs
