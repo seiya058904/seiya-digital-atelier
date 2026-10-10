@@ -142,6 +142,10 @@
   // over; right/middle buttons and modifier clicks keep native browser
   // semantics (context menu, new tab, new window).
   const handleActivation = (event) => {
+    // F-4: an activation whose default action was already prevented by another
+    // handler has been legitimately consumed — taking it over here would
+    // preempt that handler (task AT-01 item 5). Unconsumed events proceed.
+    if (event.defaultPrevented) return;
     if (event.type === 'keydown') {
       if (event.key !== 'Enter' || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     } else if (event.type === 'auxclick') {
