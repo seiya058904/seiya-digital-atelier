@@ -138,8 +138,23 @@
 
   // Single capture-phase dispatcher for every light-DOM navigation concern:
   // home/logo navigation, internal route normalization, and external blocking.
+  // Only unmodified primary-button clicks and plain keyboard Enter are taken
+  // over; right/middle buttons and modifier clicks keep native browser
+  // semantics (context menu, new tab, new window).
   const handleActivation = (event) => {
-    if (event.type === 'keydown' && event.key !== 'Enter') return;
+    // F-4: an activation whose default action was already prevented by another
+    // handler has been legitimately consumed — taking it over here would
+    // preempt that handler (task AT-01 item 5). Unconsumed events proceed.
+    if (event.defaultPrevented) return;
+    if (event.type === 'keydown') {
+      if (event.key !== 'Enter' || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    } else if (event.type === 'auxclick') {
+      // auxiliary activations (e.g. middle button) belong to the browser;
+      // never navigate the current tab from here.
+      return;
+    } else if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+      return;
+    }
     const link = event.target instanceof Element ? event.target.closest('a[href], area[href]') : null;
     if (!link || link.dataset.navigationDisabled === 'true') return;
     if (link.dataset.allowExternal === 'true') return;
@@ -160,12 +175,9 @@
       event.stopImmediatePropagation();
     }
   };
-  const handlePointerDown = (event) => {
-    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
-    if (!link || link.dataset.navigationDisabled === 'true' || link.dataset.allowExternal === 'true') return;
-    if (isHomeLink(link)) goHome(event);
-  };
-  document.addEventListener('pointerdown', handlePointerDown, true);
+  // pointerdown deliberately does not navigate: a press may still be cancelled
+  // (drag away, pointercancel, no click). Navigation happens only on the
+  // completed activation handled above.
   document.addEventListener('click', handleActivation, true);
   document.addEventListener('auxclick', handleActivation, true);
   document.addEventListener('keydown', handleActivation, true);
