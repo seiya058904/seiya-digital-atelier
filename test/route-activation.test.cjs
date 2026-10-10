@@ -133,3 +133,26 @@ test('external links and dangerous protocols stay blocked on plain clicks', () =
   assert.equal(event.defaultPrevented, true, 'plain click on external link must be prevented');
   assert.equal(app.assigned.length, 0);
 });
+
+test('an activation already consumed by another handler is never preempted (F-4)', () => {
+  const env = pagesEnv();
+  const app = load(env);
+  // another capture-phase handler legitimately consumed these events first
+  const consume = (event) => { event.preventDefault = () => { event.defaultPrevented = true; }; event.preventDefault(); };
+  const homeClick = activation(anchor('/#hero', 'Home'));
+  consume(homeClick);
+  app.dispatch('click', homeClick);
+  const workClick = activation(anchor('/work/'));
+  consume(workClick);
+  app.dispatch('click', workClick);
+  assert.deepEqual(app.assigned, [], 'prevented clicks must not trigger custom navigation');
+
+  const enterKey = activation(anchor('/#hero', 'Home'), { key: 'Enter', button: 0, detail: 0 });
+  consume(enterKey);
+  app.dispatch('keydown', enterKey);
+  assert.deepEqual(app.assigned, [], 'prevented Enter keydown must not trigger custom navigation');
+
+  // an unconsumed event still navigates (control)
+  app.dispatch('click', activation(anchor('/#hero', 'Home')));
+  assert.deepEqual(app.assigned, ['/seiya-digital-atelier/#hero'], 'unconsumed clicks still navigate');
+});
