@@ -58,8 +58,8 @@ const pagesEnv = () => ({
   location: { hostname: 'seiya058904.github.io', pathname: '/seiya-digital-atelier/', href: 'https://seiya058904.github.io/seiya-digital-atelier/', origin: 'https://seiya058904.github.io' },
 });
 
-const anchor = (href, label = 'Work') => {
-  const link = new Element({ href });
+const anchor = (href, label = 'Work', attributes = {}) => {
+  const link = new Element({ href, ...attributes });
   link.textContent = '';
   Object.defineProperty(link, 'textContent', { value: label });
   return link;
@@ -132,6 +132,68 @@ test('external links and dangerous protocols stay blocked on plain clicks', () =
   app.dispatch('click', event);
   assert.equal(event.defaultPrevented, true, 'plain click on external link must be prevented');
   assert.equal(app.assigned.length, 0);
+});
+
+// AT-01 round 2: anchors carrying native special navigation semantics
+// (non-default target, download attribute) belong to the browser — the
+// capture-phase takeover must never force them into current-tab navigation.
+const activationRoutes = [
+  ['/#hero', 'Home', '/seiya-digital-atelier/#hero'],
+  ['/work/', 'Work', '/seiya-digital-atelier/work/'],
+  ['/about/', 'About', '/seiya-digital-atelier/about/'],
+  ['/contact/', 'Contact', '/seiya-digital-atelier/contact/'],
+];
+
+test('plain and explicit _self activations navigate every route in the current tab', () => {
+  for (const [href, label, expected] of activationRoutes) {
+    for (const attributes of [{}, { target: '_self' }]) {
+      const app = load(pagesEnv());
+      const event = activation(anchor(href, label, attributes));
+      app.dispatch('click', event);
+      assert.deepEqual(app.assigned, [expected], `${href} ${JSON.stringify(attributes)} must assign ${expected}`);
+      assert.equal(event.defaultPrevented, true, `${href} ${JSON.stringify(attributes)} is a custom takeover`);
+    }
+  }
+});
+
+test('non-default targets keep native semantics on every route (no takeover)', () => {
+  for (const [href, label] of activationRoutes) {
+    for (const target of ['_blank', '_parent', '_top', 'framer-canvas']) {
+      const app = load(pagesEnv());
+      const event = activation(anchor(href, label, { target }));
+      app.dispatch('click', event);
+      assert.deepEqual(app.assigned, [], `target=${target} on ${href} must not navigate the current tab`);
+      assert.ok(event.defaultPrevented !== true, `target=${target} on ${href} must keep the native default action`);
+    }
+  }
+});
+
+test('download attribute presence (empty or named) keeps native semantics', () => {
+  for (const [href, label] of activationRoutes) {
+    for (const download of ['', 'portfolio-2026.pdf']) {
+      const app = load(pagesEnv());
+      const event = activation(anchor(href, label, { download }));
+      app.dispatch('click', event);
+      assert.deepEqual(app.assigned, [], `download=${JSON.stringify(download)} on ${href} must not navigate the current tab`);
+      assert.ok(event.defaultPrevented !== true, `download=${JSON.stringify(download)} on ${href} must keep the native default action`);
+    }
+  }
+  // keyboard Enter on a download link also stays native
+  const app = load(pagesEnv());
+  const event = activation(anchor('/work/', 'Work', { download: '' }), { key: 'Enter', button: 0, detail: 0 });
+  app.dispatch('keydown', event);
+  assert.deepEqual(app.assigned, [], 'Enter on a download link must not navigate the current tab');
+  assert.ok(event.defaultPrevented !== true, 'Enter on a download link must keep the native default action');
+});
+
+test('external links stay blocked regardless of target or download attributes', () => {
+  for (const attributes of [{ target: '_blank' }, { download: '' }]) {
+    const app = load(pagesEnv());
+    const event = activation(anchor('https://example.com/x', 'Work', attributes));
+    app.dispatch('click', event);
+    assert.equal(event.defaultPrevented, true, `external link ${JSON.stringify(attributes)} must stay blocked`);
+    assert.deepEqual(app.assigned, [], `external link ${JSON.stringify(attributes)} must not navigate`);
+  }
 });
 
 test('an activation already consumed by another handler is never preempted (F-4)', () => {

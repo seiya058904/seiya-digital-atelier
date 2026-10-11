@@ -159,6 +159,22 @@
     if (!link || link.dataset.navigationDisabled === 'true') return;
     if (link.dataset.allowExternal === 'true') return;
     const href = link.getAttribute('href');
+    if (isExternal(href)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
+    // AT-01: anchors carrying native special navigation semantics belong to
+    // the browser — never force them into a current-tab takeover. `download`
+    // is checked by attribute presence (download="" is a valid bare-download
+    // hint, so the value itself is irrelevant); any target other than an
+    // explicit "_self" (e.g. "_blank", "_top", a named window) must keep its
+    // native tab/window behavior. Both checks only apply to site links:
+    // external ones were already blocked above, so the passthrough scope of
+    // the external filter is unchanged.
+    if (link.getAttribute('download') !== null) return;
+    const windowTarget = String(link.getAttribute('target') || '').trim().toLowerCase();
+    if (windowTarget && windowTarget !== '_self') return;
     if (event.type !== 'auxclick' && isHomeLink(link)) {
       goHome(event);
       return;
@@ -168,11 +184,6 @@
       event.preventDefault();
       event.stopImmediatePropagation();
       window.location.assign(sitePath(`${path}/`));
-      return;
-    }
-    if (isExternal(href)) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
     }
   };
   // pointerdown deliberately does not navigate: a press may still be cancelled
