@@ -25,6 +25,12 @@
   <sub>EDITORIAL PORTFOLIO &nbsp;·&nbsp; FOUR PUBLIC PAGES &nbsp;·&nbsp; STATIC FRAMER EXPORT &nbsp;·&nbsp; NO BUILD STEP</sub>
 </p>
 
+<p align="center">
+  <img src="assets/main/framerusercontent.com/images/og-seiya-digital-atelier.jpg" width="840" alt="Visual preview image bundled with the Seiya Digital Atelier static website" />
+  <br />
+  <sub>The site's own published preview image, preserved with the static export.</sub>
+</p>
+
 ---
 
 > **A place for the work, without turning the work into a dashboard.**
