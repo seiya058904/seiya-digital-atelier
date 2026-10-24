@@ -156,7 +156,7 @@ python server.py 8788
 These use Node's built-in test runner; there is no repository-defined build, lint, or installation command.
 
 ```powershell
-node --test test/work-card-guard.test.cjs test/route-links.test.cjs test/cms-compat.test.cjs test/page-metadata.test.cjs
+node --test test/work-card-guard.test.cjs test/route-links.test.cjs test/route-activation.test.cjs test/cms-compat.test.cjs test/page-metadata.test.cjs
 ```
 
 An optional browser/startup check is also present:
