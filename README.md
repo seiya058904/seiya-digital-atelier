@@ -1,4 +1,4 @@
-<h1 align="center">Seiya — Digital Atelier</h1>
+<h1 align="center">✦ Seiya — Digital Atelier</h1>
 
 <p align="center">
   <strong>A personal studio for work in progress and ideas made visible.</strong>
@@ -10,24 +10,26 @@
 </p>
 
 <p align="center">
-  <a href="https://seiya058904.github.io/seiya-digital-atelier/"><strong>Visit the Atelier</strong></a>
+  <a href="https://seiya058904.github.io/seiya-digital-atelier/"><strong>↗ Visit the Atelier</strong></a>
   &nbsp;·&nbsp;
-  <a href="#four-pages-one-studio">Explore</a>
+  <a href="#four-pages-one-studio">✦ Explore</a>
   &nbsp;·&nbsp;
-  <a href="https://seiya058904.github.io/seiya-digital-atelier/work/">Selected work</a>
+  <a href="https://seiya058904.github.io/seiya-digital-atelier/work/">🗂️ Selected Work</a>
   &nbsp;·&nbsp;
-  <a href="#a-preserved-static-website">Architecture</a>
+  <a href="#a-preserved-static-website">⚙️ Architecture</a>
   &nbsp;·&nbsp;
-  <a href="#run-it-locally">Development</a>
+  <a href="#run-it-locally">🛠️ Development</a>
 </p>
 
 <p align="center">
   <sub>EDITORIAL PORTFOLIO &nbsp;·&nbsp; FOUR PUBLIC PAGES &nbsp;·&nbsp; STATIC FRAMER EXPORT &nbsp;·&nbsp; NO BUILD STEP</sub>
 </p>
 
-![The Seiya Digital Atelier home page: a hero headline over a photograph of a yellow flower, with Work, About, and Contact navigation](docs/assets/readme-home-1280.jpg)
-
-*The home page of the live site, captured at 1280×720 from a fresh browser profile. Its photographs and the cards on the Work page come from the Framer template the export was made from.*
+<p align="center">
+  <img src="assets/main/framerusercontent.com/images/og-seiya-digital-atelier.jpg" width="840" alt="Visual preview image bundled with the Seiya Digital Atelier static website" />
+  <br />
+  <sub>The site's own published preview image, preserved with the static export.</sub>
+</p>
 
 ---
 
@@ -36,7 +38,7 @@
 > The Atelier brings a selection of digital projects and personal direction into a smaller, quieter web presence. It is a studio entrance—not a collection of unrelated landing-page templates or a full CMS product.
 
 <a id="four-pages-one-studio"></a>
-## Four Pages. One Studio.
+## ✦ Four Pages. One Studio.
 
 <table>
   <tr>
@@ -69,7 +71,7 @@
   </tr>
 </table>
 
-## Work With Its Own Identity
+## 🧩 Work With Its Own Identity
 
 The Atelier acts as a curated doorway, not a replacement for the repositories where projects are built and maintained. Selected outbound links in the exported interface lead to independent work such as [Hardware Monitoring](https://github.com/seiya058904/Hardware-Monitoring), [Seiya Digital Journal](https://seiya058904.github.io/seiya-digital-journal/), and [INSTANCE](https://seiya058904.github.io/INSTANCE/).
 
@@ -77,28 +79,28 @@ The Atelier acts as a curated doorway, not a replacement for the repositories wh
 > **Some original Framer work-card destinations are intentionally non-navigable.** Their detailed destination pages were not part of this preserved four-page export. Compatibility guards prevent those placeholder routes from becoming broken links; a visible project card is not a promise that a local detail page exists.
 
 <a id="a-preserved-static-website"></a>
-## A Preserved Static Website
+## ⚙️ A Preserved Static Website
 
 This repository contains a **self-contained static Framer export**. Its four pages and their images, fonts, scripts, and compatibility files are checked into Git. It does **not** contain a React source application, a `package.json`, or an npm/Vite build workflow.
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <h3>Real Static Pages</h3>
+      <h3>📄 Real Static Pages</h3>
       <p>Committed `index.html` files provide the Home, Work, About, and Contact entries. GitHub Pages serves the checked-in export beneath the <code>/seiya-digital-atelier/</code> prefix.</p>
     </td>
     <td width="50%" valign="top">
-      <h3>Route-Aware Navigation</h3>
+      <h3>🧭 Route-Aware Navigation</h3>
       <p>Compatibility code keeps internal navigation working at the local root and under the GitHub Pages subpath, including Framer-generated links.</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <h3>Preserved Assets</h3>
+      <h3>🗃️ Preserved Assets</h3>
       <p>The exported media and retained source/reference files support the site's original presentation and make targeted restoration possible.</p>
     </td>
     <td width="50%" valign="top">
-      <h3>Guarded Interactions</h3>
+      <h3>🛡️ Guarded Interactions</h3>
       <p>Work/CMS compatibility and specific link guards preserve what is available without inventing missing project pages or enabling unrelated template destinations.</p>
     </td>
   </tr>
@@ -111,7 +113,7 @@ Framer-generated navigation and CMS content can expect behaviors that a plain st
 <p align="center"><code>STATIC PAGE → ROUTE COMPATIBILITY → LOCAL ASSETS → RENDERED STUDIO</code></p>
 
 <a id="run-it-locally"></a>
-## Run It Locally
+## 🚀 Run It Locally
 
 A small, route-aware **Python HTTP server** is included. From the Git repository root:
 
@@ -130,7 +132,7 @@ python server.py 8788
 **No installation or frontend compilation is required** to preview the committed export. Use a web server instead of assuming that double-clicking individual HTML files reproduces all routes and asset requests.
 
 <details>
-<summary><strong>Expand file map, verification &amp; preservation rules</strong></summary>
+<summary><strong>🛠️ Expand file map, verification &amp; preservation rules</strong></summary>
 
 ### Repository map
 
@@ -173,7 +175,7 @@ Read [`AGENTS.md`](AGENTS.md) for current repository conventions and test expect
 
 </details>
 
-## Rights & Source Notes
+## 📜 Rights & Source Notes
 
 The repository does **not** declare a project-wide open-source license. Public availability of a preserved export does not itself grant permission to copy, modify, or redistribute its source, third-party media, fonts, or framework assets. Check the rights applicable to each asset before reuse.
 
