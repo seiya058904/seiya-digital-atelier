@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="docs/readme-cover.svg" width="100%" alt="DIGITAL ATELIER — illustrated project cover" />
+  <a href="https://seiya058904.github.io/seiya-digital-atelier/">
+    <img src="docs/readme-cover.svg" width="100%" alt="DIGITAL ATELIER — illustrated project cover" />
+  </a>
 </p>
 
 <h1 align="center">✦ Seiya — Digital Atelier</h1>
@@ -157,10 +159,10 @@ python server.py 8788
 
 ### Regression checks
 
-These use Node's built-in test runner; there is no repository-defined build, lint, or installation command.
+These use Node's built-in test runner and include all six regression files, covering routing, asset paths, cards, CMS compatibility, and page metadata. There is no repository-defined build, lint, or installation command.
 
 ```powershell
-node --test test/work-card-guard.test.cjs test/route-links.test.cjs test/route-activation.test.cjs test/cms-compat.test.cjs test/page-metadata.test.cjs
+node --test "test/*.test.cjs"
 ```
 
 An optional browser/startup check is also present:
