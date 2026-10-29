@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="cover-title cover-desc">
+  <title id="cover-title">seiya-digital-atelier — illustrated project cover</title>
+  <desc id="cover-desc">A studio for ideas made visible. A decorative vector illustration accompanies the project title.</desc>
+  <rect width="1200" height="360" rx="24" fill="#F3EFE5"/>
+  <path d="M56 70h38" stroke="#A14930" stroke-width="4" stroke-linecap="round"/>
+  <text x="110" y="76" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#A14930" letter-spacing="2">SELECTED WORK / QUIET EXPLORATION</text>
+  <text x="56" y="174" font-family="Arial, Helvetica, sans-serif" font-size="50" font-weight="700" fill="#284845" letter-spacing="0">DIGITAL ATELIER</text>
+  
+  <text x="58" y="220" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" fill="#284845" letter-spacing="0">A studio for ideas made visible.</text>
+  <text x="58" y="315" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#A14930" letter-spacing="2">WORK · ABOUT · A PRACTICE IN MOTION</text>
+  <g transform="translate(745 32)">
+  <path d="M30 45h314M30 113h314M30 181h314M30 249h314M54 22v273M122 22v273M190 22v273M258 22v273M326 22v273" stroke="#D9D0C0"/>
+  <path d="M75 92L229 46L306 207L153 254Z" fill="#D4DFE0"/>
+  <path d="M75 92l126 25 28-71Z" fill="#1E6369"/>
+  <path d="M201 117l105 90-153 47Z" fill="#638E8C"/>
+  <path d="M75 92l78 162 48-137Z" fill="#A7C0BA"/>
+  <path d="M201 117l28-71 77 161Z" fill="#F8F4EB"/>
+  <circle cx="75" cy="92" r="5" fill="#BF4C2A"/><circle cx="306" cy="207" r="5" fill="#BF4C2A"/>
+  <path d="M27 272h94M27 272v-39" stroke="#BF4C2A" stroke-width="2"/>
+  </g>
+</svg>

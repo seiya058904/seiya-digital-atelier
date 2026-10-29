@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/readme-cover.svg" width="100%" alt="DIGITAL ATELIER — illustrated project cover" />
+</p>
+
 <h1 align="center">✦ Seiya — Digital Atelier</h1>
 
 <p align="center">
@@ -87,7 +91,7 @@ This repository contains a **self-contained static Framer export**. Its four pag
   <tr>
     <td width="50%" valign="top">
       <h3>📄 Real Static Pages</h3>
-      <p>Committed `index.html` files provide the Home, Work, About, and Contact entries. GitHub Pages serves the checked-in export beneath the <code>/seiya-digital-atelier/</code> prefix.</p>
+      <p>Committed <code>index.html</code> files provide the Home, Work, About, and Contact entries. GitHub Pages serves the checked-in export beneath the <code>/seiya-digital-atelier/</code> prefix.</p>
     </td>
     <td width="50%" valign="top">
       <h3>🧭 Route-Aware Navigation</h3>
