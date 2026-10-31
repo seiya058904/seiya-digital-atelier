@@ -26,7 +26,7 @@ For changes affecting web UI, routing, interaction, responsiveness, or runtime b
 
 Use the most appropriate tool:
 
-- **Browser plugin** — preferred for routine localhost checks, navigation, visual inspection, and exploratory testing.
+- **Ego Browser** — preferred for routine navigation, visual inspection, and exploratory testing when available; use another suitable browser tool if unavailable.
 - **Playwright** — use for repeatable E2E flows, regression tests, assertions, and important user paths.
 - **Chrome plugin** — use when the real Chrome profile, cookies, sessions, extensions, or logged-in state are required.
 - **Chrome DevTools** — use for console, network, rendering, memory, scrolling, or performance diagnosis.
@@ -52,4 +52,4 @@ Preserve the static export and existing asset layout. `route-links.js` and relat
 
 ## Git workflow
 
-Recent history uses concise conventional-style subjects such as `fix: ...` and `docs: ...`; use the same style. Inspect `git status`, branch/upstream, worktrees, and recent history before substantial work. Stage explicit files only, run `git diff --check` and inspect the staged diff before committing. Preserve unrelated or uncertain user changes. Never use reset/restore/clean or force-push to manufacture a clean tree. A task is fully closed only when its changes are committed, integrated into the real default branch, pushed, and local default HEAD equals `origin/<default>` with ahead/behind `0 0` and no staged, unstaged, or untracked files.
+Recent history uses concise conventional-style subjects such as `fix: ...` and `docs: ...`; use the same style. Inspect `git status`, branch/upstream, worktrees, and recent history before substantial work. Stage explicit files only, run `git diff --check` and inspect the staged diff before committing. Preserve unrelated or uncertain user changes. Never use reset/restore/clean or force-push to manufacture a clean tree. Commit, merge, push and deployment require authorization for the current task. When synchronization is authorized, verify the intended branch against the current remote and report preserved unrelated changes rather than removing them for cleanliness.
